@@ -205,4 +205,145 @@
   .secondary-btn {
     width: 100%;
   }
+
+  .scroll-indicator {
+    display: none;
+  }
+}
+
+/* Cursor idle state - stops blinking after typing completes */
+.cursor-idle {
+  animation: none;
+  opacity: 1;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .cursor {
+    animation: none;
+    opacity: 1;
+  }
+
+  .primary-btn:hover,
+  .secondary-btn:hover {
+    transform: none;
+  }
+
+  .primary-btn:active,
+  .secondary-btn:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Scroll Indicator Styles */
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-indicator:hover {
+  opacity: 0.8;
+}
+
+.scroll-indicator:focus {
+  outline: 2px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.scroll-text {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+.scroll-mouse {
+  width: 24px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  position: relative;
+}
+
+.scroll-wheel {
+  width: 4px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 2px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scrollWheel 2s ease-in-out infinite;
+}
+
+@keyframes scrollWheel {
+  0%, 100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateX(-50%) translateY(10px);
+  }
+}
+
+.scroll-arrows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.scroll-arrows span {
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  transform: rotate(45deg);
+  animation: scrollArrow 2s ease-in-out infinite;
+}
+
+.scroll-arrows span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+@keyframes scrollArrow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: rotate(45deg) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(45deg) translateY(5px);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+    opacity: 1;
+  }
+
+  .scroll-wheel,
+  .scroll-arrows span {
+    animation: none;
+  }
+
+  .image-glow {
+    animation: none;
+    opacity: 0.6;
+  }
 }

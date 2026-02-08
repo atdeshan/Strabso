@@ -150,6 +150,10 @@
     height: 1.75rem;
     font-size: 0.75rem;
   }
+.logo-icon img {
+    width: 6rem;  /* Reduced from 10rem */
+    height: 2.5rem; /* Reduced from 4rem */
+  }
 
   .nav-links {
     gap: 0.25rem;
@@ -162,6 +166,11 @@
 }
 
 @media (max-width: 480px) {
+    .logo-icon img {
+    width: 4.5rem;  /* Even smaller for very small screens */
+    height: 2rem;
+  }
+
   .nav-link {
     padding: 0.4rem 0.6rem;
     font-size: 0.8rem;

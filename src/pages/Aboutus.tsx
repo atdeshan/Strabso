@@ -1,8 +1,20 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ContactUs from '../components/Contacts';
 
 const AboutUs: React.FC = () => {
   const statsRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,49 +64,49 @@ const AboutUs: React.FC = () => {
   const values = [
     {
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="value-svg-icon">
           <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
       title: 'Innovation',
-      description: 'We push creative boundaries to deliver experiences that have never been seen before.',
+      description: 'Innovative event and activation concepts that set your brand apart from the competition.',
     },
     {
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="value-svg-icon">
           <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
-      title: 'Passion',
-      description: 'Every event is a labor of love, crafted with dedication and genuine enthusiasm.',
+      title: 'Brand-First',
+      description: 'Deep brand-first strategic thinking — not just BTL execution, but complete brand elevation.',
     },
     {
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="value-svg-icon">
           <path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
-      title: 'Excellence',
-      description: 'We accept nothing less than perfection in every detail, every moment, every time.',
+      title: 'Regional Reach',
+      description: 'Strong North & East regional resource network with island-wide coverage across Sri Lanka.',
     },
     {
       icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="value-svg-icon">
           <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
-      title: 'Collaboration',
-      description: 'Your vision combined with our expertise creates something truly extraordinary.',
+      title: 'Government Relations',
+      description: 'Government sector approvals, involvement & collaborations for seamless execution.',
     },
   ];
 
   const milestones = [
-    { year: '2015', event: 'Strabsol Founded', description: 'Started with a vision to transform brand experiences' },
-    { year: '2017', event: 'First Major Festival', description: 'Produced Desert Nights with 10,000+ attendees' },
-    { year: '2019', event: 'International Expansion', description: 'Opened offices in Dubai and Singapore' },
-    { year: '2021', event: 'Industry Recognition', description: 'Won Best Event Agency at Global Awards' },
-    { year: '2023', event: '500+ Events Milestone', description: 'Celebrated our landmark achievement' },
-    { year: '2024', event: 'Innovation Hub Launch', description: 'Opened state-of-the-art creative studio' },
+    { year: '2020', event: 'Strabso Founded', description: 'Started with a vision to transform brand activations in Sri Lanka' },
+    { year: '2021', event: 'Major Brand Partnerships', description: 'Partnered with Coca-Cola, HNB, and leading FMCG brands' },
+    { year: '2022', event: 'North & East Expansion', description: 'Established strong presence in Northern and Eastern regions' },
+    { year: '2023', event: 'Corporate Events', description: 'Executed Coca-Cola Annual Sales Conference and Award Ceremonies' },
+    { year: '2024', event: '360° Solutions', description: 'Launched complete end-to-end brand activation services' },
+    { year: '2025', event: 'Industry Leader', description: 'Targeting top 5 agency position with 360° client solutions' },
   ];
 
   return (
@@ -103,21 +115,27 @@ const AboutUs: React.FC = () => {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap');
 
         .about-us-page {
-          --color-bg: #0a0a0f;
-          --color-bg-secondary: #12121a;
+          --color-bg: transparent;
+          --color-bg-secondary: rgba(18, 18, 26, 0.85);
           --color-text: #ffffff;
           --color-text-muted: #a0a0b0;
-          --color-accent: #f97316;
+          --color-accent: #00ff84;
           --color-accent-hover: #fb923c;
           --color-border: rgba(255, 255, 255, 0.1);
           --font-display: 'Playfair Display', Georgia, serif;
           --font-body: 'Outfit', sans-serif;
-          
-          background-color: var(--color-bg);
+
+          background-color: transparent;
           color: var(--color-text);
           font-family: var(--font-body);
           min-height: 100vh;
           overflow-x: hidden;
+        }
+
+        /* Value SVG Icon Styling */
+        .value-svg-icon {
+          width: 32px;
+          height: 32px;
         }
 
         /* Hero Section */
@@ -128,22 +146,24 @@ const AboutUs: React.FC = () => {
           align-items: center;
           justify-content: center;
           overflow: hidden;
+          padding: 2rem;
         }
 
         .hero-bg {
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, transparent 50%),
-                      linear-gradient(225deg, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-                      var(--color-bg);
+          background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
+                      linear-gradient(225deg, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+          pointer-events: none;
         }
 
         .hero-bg::before {
           content: '';
           position: absolute;
           inset: 0;
-          background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
           background-size: 50px 50px;
+          pointer-events: none;
         }
 
         .hero-content {
@@ -170,7 +190,7 @@ const AboutUs: React.FC = () => {
 
         .hero-title {
           font-family: var(--font-display);
-          font-size: clamp(3rem, 8vw, 6rem);
+          font-size: clamp(2.5rem, 8vw, 6rem);
           font-weight: 500;
           line-height: 1.1;
           margin-bottom: 1.5rem;
@@ -183,7 +203,7 @@ const AboutUs: React.FC = () => {
         }
 
         .hero-description {
-          font-size: 1.25rem;
+          font-size: clamp(1rem, 3vw, 1.25rem);
           color: var(--color-text-muted);
           max-width: 600px;
           margin: 0 auto 3rem;
@@ -193,7 +213,7 @@ const AboutUs: React.FC = () => {
 
         .scroll-indicator {
           position: absolute;
-          bottom: 3rem;
+          bottom: 2rem;
           left: 50%;
           transform: translateX(-50%);
           display: flex;
@@ -216,7 +236,7 @@ const AboutUs: React.FC = () => {
 
         /* Story Section */
         .story-section {
-          padding: 8rem 2rem;
+          padding: 6rem 1.5rem;
           position: relative;
         }
 
@@ -225,7 +245,7 @@ const AboutUs: React.FC = () => {
           margin: 0 auto;
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 6rem;
+          gap: 4rem;
           align-items: center;
         }
 
@@ -235,17 +255,17 @@ const AboutUs: React.FC = () => {
 
         .story-image {
           width: 100%;
-          height: 600px;
+          height: 500px;
           object-fit: cover;
           border-radius: 12px;
         }
 
         .story-image-accent {
           position: absolute;
-          bottom: -2rem;
-          right: -2rem;
-          width: 200px;
-          height: 200px;
+          bottom: -1.5rem;
+          right: -1.5rem;
+          width: 150px;
+          height: 150px;
           border: 2px solid var(--color-accent);
           border-radius: 12px;
           z-index: -1;
@@ -253,9 +273,9 @@ const AboutUs: React.FC = () => {
 
         .story-content h2 {
           font-family: var(--font-display);
-          font-size: 3rem;
+          font-size: clamp(2rem, 5vw, 3rem);
           font-weight: 500;
-          margin-bottom: 2rem;
+          margin-bottom: 1.5rem;
           line-height: 1.2;
         }
 
@@ -266,14 +286,14 @@ const AboutUs: React.FC = () => {
 
         .story-content p {
           color: var(--color-text-muted);
-          font-size: 1.1rem;
+          font-size: clamp(0.95rem, 2vw, 1.1rem);
           line-height: 1.9;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.25rem;
         }
 
         .founder-quote {
-          margin-top: 3rem;
-          padding: 2rem;
+          margin-top: 2rem;
+          padding: 1.5rem;
           background: var(--color-bg-secondary);
           border-left: 3px solid var(--color-accent);
           border-radius: 0 12px 12px 0;
@@ -282,7 +302,7 @@ const AboutUs: React.FC = () => {
         .founder-quote blockquote {
           font-family: var(--font-display);
           font-style: italic;
-          font-size: 1.25rem;
+          font-size: clamp(1rem, 2.5vw, 1.25rem);
           line-height: 1.7;
           margin-bottom: 1rem;
         }
@@ -295,8 +315,10 @@ const AboutUs: React.FC = () => {
 
         /* Values Section */
         .values-section {
-          padding: 8rem 2rem;
+          padding: 6rem 1.5rem;
           background: var(--color-bg-secondary);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
           position: relative;
           overflow: hidden;
         }
@@ -314,12 +336,13 @@ const AboutUs: React.FC = () => {
         .section-header {
           text-align: center;
           max-width: 600px;
-          margin: 0 auto 5rem;
+          margin: 0 auto 4rem;
+          padding: 0 1rem;
         }
 
         .section-header h2 {
           font-family: var(--font-display);
-          font-size: 2.75rem;
+          font-size: clamp(2rem, 5vw, 2.75rem);
           font-weight: 500;
           margin-bottom: 1rem;
         }
@@ -331,20 +354,20 @@ const AboutUs: React.FC = () => {
 
         .section-header p {
           color: var(--color-text-muted);
-          font-size: 1.1rem;
+          font-size: clamp(0.95rem, 2vw, 1.1rem);
           line-height: 1.7;
         }
 
         .values-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 2rem;
+          gap: 1.5rem;
           max-width: 1200px;
           margin: 0 auto;
         }
 
         .value-card {
-          padding: 2.5rem;
+          padding: 2rem;
           background: var(--color-bg);
           border: 1px solid var(--color-border);
           border-radius: 16px;
@@ -372,20 +395,20 @@ const AboutUs: React.FC = () => {
 
         .value-card h3 {
           font-family: var(--font-display);
-          font-size: 1.5rem;
+          font-size: 1.35rem;
           font-weight: 500;
-          margin-bottom: 1rem;
+          margin-bottom: 0.75rem;
         }
 
         .value-card p {
           color: var(--color-text-muted);
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           line-height: 1.7;
         }
 
         /* Timeline Section */
         .timeline-section {
-          padding: 8rem 2rem;
+          padding: 6rem 1.5rem;
           position: relative;
         }
 
@@ -408,13 +431,13 @@ const AboutUs: React.FC = () => {
         .timeline-items {
           display: flex;
           flex-direction: column;
-          gap: 4rem;
+          gap: 3rem;
         }
 
         .timeline-item {
           display: flex;
           align-items: center;
-          gap: 4rem;
+          gap: 3rem;
         }
 
         .timeline-item:nth-child(even) {
@@ -423,7 +446,7 @@ const AboutUs: React.FC = () => {
 
         .timeline-content {
           flex: 1;
-          padding: 2rem;
+          padding: 1.5rem;
           background: var(--color-bg-secondary);
           border-radius: 16px;
           border: 1px solid var(--color-border);
@@ -436,21 +459,21 @@ const AboutUs: React.FC = () => {
 
         .timeline-year {
           font-family: var(--font-display);
-          font-size: 2.5rem;
+          font-size: clamp(1.75rem, 4vw, 2.5rem);
           font-weight: 600;
           color: var(--color-accent);
           margin-bottom: 0.5rem;
         }
 
         .timeline-event {
-          font-size: 1.25rem;
+          font-size: clamp(1rem, 2.5vw, 1.25rem);
           font-weight: 500;
           margin-bottom: 0.5rem;
         }
 
         .timeline-description {
           color: var(--color-text-muted);
-          font-size: 0.95rem;
+          font-size: 0.9rem;
         }
 
         .timeline-dot {
@@ -466,14 +489,16 @@ const AboutUs: React.FC = () => {
 
         /* Team Section */
         .team-section {
-          padding: 8rem 2rem;
+          padding: 6rem 1.5rem;
           background: var(--color-bg-secondary);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
         }
 
         .team-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 2rem;
+          gap: 1.5rem;
           max-width: 1200px;
           margin: 0 auto;
         }
@@ -483,7 +508,6 @@ const AboutUs: React.FC = () => {
           border-radius: 16px;
           overflow: hidden;
           aspect-ratio: 3/4;
-          group: team-card;
         }
 
         .team-card img {
@@ -504,7 +528,7 @@ const AboutUs: React.FC = () => {
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
-          padding: 1.5rem;
+          padding: 1.25rem;
           opacity: 0;
           transition: opacity 0.4s ease;
         }
@@ -524,27 +548,29 @@ const AboutUs: React.FC = () => {
 
         .team-name {
           font-family: var(--font-display);
-          font-size: 1.5rem;
+          font-size: clamp(1.1rem, 2.5vw, 1.5rem);
           font-weight: 500;
           margin-bottom: 0.25rem;
         }
 
         .team-role {
           color: var(--color-accent);
-          font-size: 0.9rem;
-          margin-bottom: 0.75rem;
+          font-size: 0.85rem;
+          margin-bottom: 0.5rem;
         }
 
         .team-description {
           color: var(--color-text-muted);
-          font-size: 0.85rem;
+          font-size: 0.8rem;
           line-height: 1.6;
         }
 
         /* Stats Banner */
         .stats-banner {
-          padding: 6rem 2rem;
-          background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, var(--color-bg) 100%);
+          padding: 5rem 1.5rem;
+          background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(10, 10, 15, 0.6) 100%);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
           border-top: 1px solid var(--color-border);
           border-bottom: 1px solid var(--color-border);
         }
@@ -552,7 +578,7 @@ const AboutUs: React.FC = () => {
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 3rem;
+          gap: 2rem;
           max-width: 1000px;
           margin: 0 auto;
           text-align: center;
@@ -560,7 +586,7 @@ const AboutUs: React.FC = () => {
 
         .stat-item h3 {
           font-family: var(--font-display);
-          font-size: 4rem;
+          font-size: clamp(2.5rem, 6vw, 4rem);
           font-weight: 600;
           color: var(--color-accent);
           margin-bottom: 0.5rem;
@@ -568,14 +594,14 @@ const AboutUs: React.FC = () => {
 
         .stat-item p {
           color: var(--color-text-muted);
-          font-size: 1rem;
+          font-size: clamp(0.8rem, 2vw, 1rem);
           text-transform: uppercase;
           letter-spacing: 0.1em;
         }
 
         /* CTA Section */
         .cta-section {
-          padding: 8rem 2rem;
+          padding: 6rem 1.5rem;
           text-align: center;
           position: relative;
           overflow: hidden;
@@ -593,11 +619,12 @@ const AboutUs: React.FC = () => {
           z-index: 10;
           max-width: 700px;
           margin: 0 auto;
+          padding: 0 1rem;
         }
 
         .cta-title {
           font-family: var(--font-display);
-          font-size: 3.5rem;
+          font-size: clamp(2rem, 6vw, 3.5rem);
           font-weight: 500;
           margin-bottom: 1.5rem;
           line-height: 1.2;
@@ -610,16 +637,16 @@ const AboutUs: React.FC = () => {
 
         .cta-description {
           color: var(--color-text-muted);
-          font-size: 1.2rem;
+          font-size: clamp(1rem, 2.5vw, 1.2rem);
           line-height: 1.8;
-          margin-bottom: 3rem;
+          margin-bottom: 2rem;
         }
 
         .cta-button {
           display: inline-flex;
           align-items: center;
           gap: 0.75rem;
-          padding: 1rem 2.5rem;
+          padding: 1rem 2rem;
           background: var(--color-accent);
           color: var(--color-bg);
           font-weight: 500;
@@ -690,8 +717,16 @@ const AboutUs: React.FC = () => {
           transform: translateY(0);
         }
 
-        /* Responsive Styles */
+        /* ========== TABLET STYLES (768px - 1024px) ========== */
         @media (max-width: 1024px) {
+          .hero-section {
+            min-height: 80vh;
+          }
+
+          .hero-content {
+            padding: 1.5rem;
+          }
+
           .story-container {
             grid-template-columns: 1fr;
             gap: 3rem;
@@ -701,12 +736,36 @@ const AboutUs: React.FC = () => {
             height: 400px;
           }
 
+          .story-image-accent {
+            width: 120px;
+            height: 120px;
+            bottom: -1rem;
+            right: -1rem;
+          }
+
           .values-grid {
             grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+          }
+
+          .value-card {
+            padding: 1.75rem;
+          }
+
+          .value-icon {
+            width: 56px;
+            height: 56px;
+            margin-bottom: 1.25rem;
+          }
+
+          .value-svg-icon {
+            width: 28px;
+            height: 28px;
           }
 
           .team-grid {
             grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
           }
 
           .stats-grid {
@@ -715,52 +774,468 @@ const AboutUs: React.FC = () => {
           }
 
           .timeline-line {
-            left: 20px;
+            left: 24px;
           }
 
           .timeline-item,
           .timeline-item:nth-child(even) {
             flex-direction: row;
-            gap: 2rem;
+            gap: 1.5rem;
+            padding-left: 0;
           }
 
           .timeline-dot {
             order: -1;
+            margin-left: 16px;
+          }
+
+          .timeline-content {
+            flex: 1;
+          }
+
+          .timeline-item > div:last-child {
+            display: none;
+          }
+
+          /* Show team overlay by default on tablet */
+          .team-overlay {
+            opacity: 1;
+            background: linear-gradient(to top, rgba(10, 10, 15, 0.9) 0%, rgba(10, 10, 15, 0.3) 60%, transparent 100%);
+          }
+
+          .team-info {
+            transform: translateY(0);
           }
         }
 
-        @media (max-width: 640px) {
+        /* ========== MOBILE STYLES (up to 767px) ========== */
+        @media (max-width: 767px) {
+          .hero-section {
+            min-height: 85vh;
+            padding: 1rem;
+          }
+
+          .hero-content {
+            padding: 1rem;
+          }
+
+          .hero-label {
+            padding: 0.4rem 1rem;
+            font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+          }
+
           .hero-title {
-            font-size: 2.5rem;
+            margin-bottom: 1.25rem;
+          }
+
+          .hero-description {
+            margin-bottom: 2rem;
+            line-height: 1.7;
+          }
+
+          .scroll-indicator {
+            bottom: 1.5rem;
+          }
+
+          .scroll-line {
+            height: 40px;
+          }
+
+          .story-section {
+            padding: 4rem 1rem;
+          }
+
+          .story-container {
+            gap: 2rem;
+          }
+
+          .story-image {
+            height: 300px;
+          }
+
+          .story-image-accent {
+            width: 80px;
+            height: 80px;
+            bottom: -0.75rem;
+            right: -0.75rem;
+          }
+
+          .story-content p {
+            margin-bottom: 1rem;
+          }
+
+          .founder-quote {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+          }
+
+          .values-section {
+            padding: 4rem 1rem;
+          }
+
+          .section-header {
+            margin-bottom: 3rem;
           }
 
           .values-grid {
             grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+
+          .value-card {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .value-card:hover {
+            transform: none;
+          }
+
+          .value-card:active {
+            transform: scale(0.98);
+          }
+
+          .value-icon {
+            width: 52px;
+            height: 52px;
+            margin-bottom: 1rem;
+          }
+
+          .value-svg-icon {
+            width: 24px;
+            height: 24px;
+          }
+
+          .value-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .value-card p {
+            font-size: 0.85rem;
+          }
+
+          .timeline-section {
+            padding: 4rem 1rem;
+          }
+
+          .timeline-line {
+            left: 12px;
+          }
+
+          .timeline-items {
+            gap: 2rem;
+          }
+
+          .timeline-item,
+          .timeline-item:nth-child(even) {
+            gap: 1rem;
+          }
+
+          .timeline-dot {
+            width: 12px;
+            height: 12px;
+            margin-left: 6px;
+          }
+
+          .timeline-content {
+            padding: 1.25rem;
+          }
+
+          .timeline-year {
+            margin-bottom: 0.25rem;
+          }
+
+          .timeline-event {
+            margin-bottom: 0.25rem;
+          }
+
+          .timeline-description {
+            font-size: 0.85rem;
+          }
+
+          .team-section {
+            padding: 4rem 1rem;
           }
 
           .team-grid {
             grid-template-columns: 1fr;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
           }
 
-          .stats-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .stat-item h3 {
-            font-size: 3rem;
-          }
-
-          .cta-title {
-            font-size: 2.5rem;
-          }
-
-          .story-content h2,
-          .section-header h2 {
-            font-size: 2rem;
+          .team-card {
+            aspect-ratio: 4/5;
           }
 
           .team-overlay {
             opacity: 1;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.4) 50%, transparent 100%);
+          }
+
+          .team-info {
+            transform: translateY(0);
+          }
+
+          .team-name {
+            font-size: 1.25rem;
+          }
+
+          .team-role {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .team-description {
+            font-size: 0.8rem;
+            line-height: 1.5;
+          }
+
+          .stats-banner {
+            padding: 3.5rem 1rem;
+          }
+
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+          }
+
+          .stat-item h3 {
+            margin-bottom: 0.25rem;
+          }
+
+          .cta-section {
+            padding: 4rem 1rem;
+          }
+
+          .cta-description {
+            margin-bottom: 1.5rem;
+          }
+
+          .cta-button {
+            padding: 0.875rem 1.75rem;
+            font-size: 0.95rem;
+          }
+        }
+
+        /* ========== SMALL MOBILE STYLES (up to 480px) ========== */
+        @media (max-width: 480px) {
+          .hero-section {
+            min-height: 80vh;
+          }
+
+          .hero-label {
+            padding: 0.35rem 0.875rem;
+            font-size: 0.7rem;
+            margin-bottom: 1.25rem;
+          }
+
+          .story-section {
+            padding: 3rem 1rem;
+          }
+
+          .story-image {
+            height: 250px;
+            border-radius: 8px;
+          }
+
+          .story-image-accent {
+            display: none;
+          }
+
+          .founder-quote {
+            padding: 1rem;
+          }
+
+          .values-section {
+            padding: 3rem 1rem;
+          }
+
+          .section-header {
+            margin-bottom: 2.5rem;
+          }
+
+          .value-card {
+            padding: 1.25rem;
+          }
+
+          .timeline-section {
+            padding: 3rem 1rem;
+          }
+
+          .timeline-content {
+            padding: 1rem;
+          }
+
+          .team-section {
+            padding: 3rem 1rem;
+          }
+
+          .stats-banner {
+            padding: 3rem 1rem;
+          }
+
+          .stats-grid {
+            gap: 1.25rem;
+          }
+
+          .cta-section {
+            padding: 3rem 1rem;
+          }
+
+          .cta-button {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        /* ========== EXTRA SMALL MOBILE (up to 360px) ========== */
+        @media (max-width: 360px) {
+          .hero-content {
+            padding: 0.75rem;
+          }
+
+          .story-image {
+            height: 220px;
+          }
+
+          .timeline-line {
+            left: 8px;
+          }
+
+          .timeline-dot {
+            width: 10px;
+            height: 10px;
+            margin-left: 3px;
+          }
+
+          .timeline-item,
+          .timeline-item:nth-child(even) {
+            gap: 0.75rem;
+          }
+        }
+
+        /* ========== TOUCH DEVICE OPTIMIZATIONS ========== */
+        @media (hover: none) and (pointer: coarse) {
+          .value-card:hover {
+            transform: none;
+            border-color: var(--color-border);
+            box-shadow: none;
+          }
+
+          .value-card:active {
+            transform: scale(0.98);
+            border-color: var(--color-accent);
+          }
+
+          .timeline-content:hover {
+            border-color: var(--color-border);
+          }
+
+          .timeline-content:active {
+            border-color: var(--color-accent);
+          }
+
+          .team-card:hover img {
+            transform: none;
+          }
+
+          .team-overlay {
+            opacity: 1;
+          }
+
+          .team-info {
+            transform: translateY(0);
+          }
+
+          .cta-button:hover {
+            transform: none;
+            box-shadow: none;
+          }
+
+          .cta-button:active {
+            transform: scale(0.98);
+          }
+        }
+
+        /* ========== REDUCED MOTION ========== */
+        @media (prefers-reduced-motion: reduce) {
+          *,
+          *::before,
+          *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+
+          .fade-up {
+            opacity: 1;
+            transform: none;
+          }
+
+          .scroll-line {
+            animation: none;
+          }
+        }
+
+        /* ========== LANDSCAPE MOBILE ========== */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+          .hero-section {
+            min-height: 100vh;
+            padding: 1rem 2rem;
+          }
+
+          .hero-content {
+            padding: 1rem;
+          }
+
+          .hero-label {
+            margin-bottom: 1rem;
+          }
+
+          .hero-description {
+            margin-bottom: 1.5rem;
+          }
+
+          .scroll-indicator {
+            display: none;
+          }
+
+          .story-container {
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+          }
+
+          .story-image {
+            height: 280px;
+          }
+
+          .values-grid {
+            grid-template-columns: repeat(4, 1fr);
+          }
+
+          .value-card {
+            padding: 1rem;
+          }
+
+          .team-grid {
+            grid-template-columns: repeat(4, 1fr);
+          }
+
+          .stats-grid {
+            grid-template-columns: repeat(4, 1fr);
+          }
+        }
+
+        /* ========== HIGH DPI SCREENS ========== */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+          .hero-bg::before {
+            background-size: 40px 40px;
           }
         }
       `}</style>
@@ -770,22 +1245,24 @@ const AboutUs: React.FC = () => {
         <div className="hero-bg" />
         <div className="hero-content">
           <span className="hero-label">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" style={{ width: '16px', height: '16px' }}>
+            <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '16px', height: '16px' }}>
               <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
             </svg>
-            Our Story
+            Who We Are
           </span>
           <h1 className="hero-title">
-            Crafting <span className="accent">Extraordinary</span> Experiences
+            Your <span className="accent">360°</span> Brand Partner
           </h1>
           <p className="hero-description">
-            We are Strabsol — where passion meets precision, and every event becomes an unforgettable journey that transcends expectations.
+            Strabso is a full-service activation and events agency delivering end-to-end brand solutions with a strong presence across Sri Lanka, including the North and East regions.
           </p>
         </div>
-        <div className="scroll-indicator">
-          <span>Scroll to explore</span>
-          <div className="scroll-line" />
-        </div>
+        {!isMobile && (
+          <div className="scroll-indicator">
+            <span>Scroll to explore</span>
+            <div className="scroll-line" />
+          </div>
+        )}
       </section>
 
       {/* Story Section */}
@@ -797,26 +1274,28 @@ const AboutUs: React.FC = () => {
               alt="Event venue with elegant lighting"
               className="story-image"
             />
-            <div className="story-image-accent" />
+            {!isMobile && <div className="story-image-accent" />}
           </div>
           <div className="story-content fade-up">
             <h2>
-              Where <span className="accent">Vision</span> Meets Reality
+              Our <span className="accent">Vision</span> & Mission
             </h2>
             <p>
-              Founded in 2015, Strabsol emerged from a simple belief: every brand deserves an experience that resonates, inspires, and transforms. What started as a small team of passionate event enthusiasts has grown into a full-service experiential agency trusted by global brands.
+              <strong>Vision:</strong> To identify ourselves as one of the top 5 agencies in the industry by 2025, while being the only agency providing a complete 360° solution to its clients.
             </p>
             <p>
-              We don't just plan events — we architect moments. From intimate corporate gatherings to large-scale festivals that draw thousands, our approach combines strategic thinking with boundless creativity.
+              <strong>Mission:</strong> To provide clients with a 360° business solution, reducing operational hassle, building long-term trust, and delivering high-quality execution at every touchpoint.
             </p>
-            <p>
-              Our journey has taken us across continents, working with Fortune 500 companies, emerging startups, and everything in between. But no matter the scale, our commitment remains the same: to create experiences that leave lasting impressions.
-            </p>
+            {!isMobile && (
+              <p>
+                We don't just plan events — we architect moments. From brand activations to corporate events, our approach combines strategic thinking with boundless creativity, ensuring every campaign delivers measurable results.
+              </p>
+            )}
             <div className="founder-quote">
               <blockquote>
-                "Every event is a story waiting to be told. Our job is to make that story unforgettable."
+                "We look forward to the opportunity to prove how we can elevate your brand to new heights."
               </blockquote>
-              <cite>— Sarah Mitchell, Founder & Creative Director</cite>
+              <cite>— Rumesh Chandrakumar, Founder</cite>
             </div>
           </div>
         </div>
@@ -826,10 +1305,10 @@ const AboutUs: React.FC = () => {
       <section className="values-section">
         <div className="section-header fade-up">
           <h2>
-            Our Core <span className="accent">Values</span>
+            Our Key <span className="accent">Strengths</span>
           </h2>
           <p>
-            These principles guide everything we do, from the first brainstorm to the final applause.
+            What sets Strabso apart — our unique capabilities that deliver results for your brand.
           </p>
         </div>
         <div className="values-grid">
@@ -847,20 +1326,20 @@ const AboutUs: React.FC = () => {
       <section className="stats-banner" ref={statsRef}>
         <div className="stats-grid">
           <div className="stat-item fade-up">
-            <h3>500+</h3>
-            <p>Events Delivered</p>
+            <h3>100+</h3>
+            <p>Activations Delivered</p>
           </div>
           <div className="stat-item fade-up" style={{ transitionDelay: '0.1s' }}>
-            <h3>50K+</h3>
-            <p>Attendees Reached</p>
+            <h3>25+</h3>
+            <p>Major Brands</p>
           </div>
           <div className="stat-item fade-up" style={{ transitionDelay: '0.2s' }}>
-            <h3>15</h3>
-            <p>Countries Served</p>
+            <h3>9</h3>
+            <p>Provinces Covered</p>
           </div>
           <div className="stat-item fade-up" style={{ transitionDelay: '0.3s' }}>
-            <h3>98%</h3>
-            <p>Client Satisfaction</p>
+            <h3>360°</h3>
+            <p>Complete Solutions</p>
           </div>
         </div>
       </section>
@@ -928,17 +1407,12 @@ const AboutUs: React.FC = () => {
           <p className="cta-description">
             Let's collaborate to bring your next event to life. Whether you have a clear vision or just the spark of an idea, we're here to make it extraordinary.
           </p>
-          {/* <button className="cta-button">
-            Start Your Journey
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M17 8l4 4m0 0l-4 4m4-4H3" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button> */}
         </div>
       </section>
-    <div>
+
+      <div>
         <ContactUs />
-    </div>
+      </div>
     </div>
   );
 };

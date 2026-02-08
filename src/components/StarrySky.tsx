@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo } from 'react';
 
 // Star color distribution based on stellar classification
 const starColors = [
@@ -232,11 +232,12 @@ interface StarrySkyProps {
 }
 
 const StarrySky: React.FC<StarrySkyProps> = ({ className = '', style = {} }) => {
-  const distantStars = useRef(generateStars(10, [0.5, 1], [0.2, 0.5]));
-  const midStars = useRef(generateStars(10, [1, 1.5], [0.4, 0.7]));
-  const closeStars = useRef(generateStars(10, [1.5, 2], [0.6, 0.9]));
-  // const shootingStars = useRef(generateShootingStars(10));
-  const dustParticles = useRef(generateDust(30));
+  // Use useMemo instead of useRef to avoid accessing .current during render
+  const distantStars = useMemo(() => generateStars(10, [0.5, 1], [0.2, 0.5]), []);
+  const midStars = useMemo(() => generateStars(10, [1, 1.5], [0.4, 0.7]), []);
+  const closeStars = useMemo(() => generateStars(10, [1.5, 2], [0.6, 0.9]), []);
+  // const shootingStars = useMemo(() => generateShootingStars(10), []);
+  const dustParticles = useMemo(() => generateDust(30), []);
 
   return (
     <>
@@ -343,17 +344,17 @@ const StarrySky: React.FC<StarrySkyProps> = ({ className = '', style = {} }) => 
         ))}
 
         {/* Star layers */}
-        <StarLayer stars={distantStars.current} animationDuration={120} />
-        <StarLayer stars={midStars.current} animationDuration={80} />
-        <StarLayer stars={closeStars.current} animationDuration={50} />
+        <StarLayer stars={distantStars} animationDuration={120} />
+        <StarLayer stars={midStars} animationDuration={80} />
+        <StarLayer stars={closeStars} animationDuration={50} />
 
         {/* Shooting stars */}
-        {/* {shootingStars.current.map((star, i) => (
+        {/* {shootingStars.map((star, i) => (
           <ShootingStar key={i} {...star} />
         ))} */}
 
         {/* Dust particles */}
-        {dustParticles.current.map((dust, i) => (
+        {dustParticles.map((dust, i) => (
           <Dust key={i} {...dust} />
         ))}
       </div>

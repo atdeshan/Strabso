@@ -12,7 +12,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabClick }) => {
   const navItems = [
     { name: "Home" },
     { name: "Projects" },
-    { name: "About" },
+    { name: "About" }
     // { name: "Contact" },
   ];
 

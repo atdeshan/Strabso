@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import "../styles/Home.css";
 import RotatableCarousel from "../components/RotatableCarousel";
@@ -8,6 +8,7 @@ import ServicesSection from "../components/ServiseSection";
 const Home: React.FC = () => {
   const [displayedText, setDisplayedText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
   const fullText = "Welcome to Strabso";
   const typingSpeed = 100; // milliseconds per character
 
@@ -19,8 +20,24 @@ const Home: React.FC = () => {
       }, typingSpeed);
 
       return () => clearTimeout(timeout);
+    } else {
+      setIsTypingComplete(true);
     }
-  }, [currentIndex]);
+  }, [currentIndex, fullText]);
+
+  const scrollToServices = useCallback(() => {
+    const servicesSection = document.querySelector('.services-section');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+
+  const scrollToContact = useCallback(() => {
+    const contactSection = document.querySelector('[data-section="About"]');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
 
   return (
     <motion.div
@@ -29,14 +46,21 @@ const Home: React.FC = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
       className="home-wrapper"
+      role="main"
+      aria-label="Home page"
     >
       <div className="home-container">
         {/* Left Side - Welcome Section */}
         <div className="home-content">
-          <div className="home-header">
-            <h1 className="typing-text">
-              {displayedText}
-              <span className="cursor">|</span>
+          <header className="home-header">
+            <h1 className="typing-text" aria-label={fullText}>
+              <span aria-hidden="true">{displayedText}</span>
+              <span
+                className={`cursor ${isTypingComplete ? 'cursor-idle' : ''}`}
+                aria-hidden="true"
+              >
+                |
+              </span>
             </h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -44,11 +68,34 @@ const Home: React.FC = () => {
               transition={{ delay: 2, duration: 0.8 }}
               className="subtitle"
             >
-              Your gateway to stunning visuals <br />and seamless navigation.<br /> Explore now!
-              
+              Your gateway to stunning visuals and seamless navigation.
+              <br />
+              We create unforgettable experiential events.
             </motion.p>
-           
-          </div>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.5, duration: 0.6 }}
+              className="cta-buttons"
+            >
+              <button
+                className="primary-btn"
+                onClick={scrollToServices}
+                aria-label="Explore our services"
+              >
+                Explore Services
+              </button>
+              <button
+                className="secondary-btn"
+                onClick={scrollToContact}
+                aria-label="Contact us"
+              >
+                Contact Us
+              </button>
+            </motion.div>
+          </header>
         </div>
 
         {/* Right Side - Image */}
@@ -59,16 +106,18 @@ const Home: React.FC = () => {
           className="home-image"
         >
           <div className="image-container">
-            <img 
-              src={welcomeSVG} 
-              alt="Strabso Visual" 
+            <img
+              src={welcomeSVG}
+              alt="Strabso - Creative event experiences illustration"
               className="hero-image"
+              loading="eager"
             />
-            {/* Optional: Add a glowing effect */}
-            <div className="image-glow"></div>
+            {/* Glowing effect behind image */}
+            <div className="image-glow" aria-hidden="true"></div>
           </div>
         </motion.div>
       </div>
+
       <div className="services-section">
         <ServicesSection />
       </div>
