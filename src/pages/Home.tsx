@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import "../styles/Home.css";
 import RotatableCarousel from "../components/RotatableCarousel";
-import welcomeSVG from "../assets/welcome.svg";
+import welcomeSVG from "../assets/welcome.png";
 import ServicesSection from "../components/ServiseSection";
 
 const Home: React.FC = () => {

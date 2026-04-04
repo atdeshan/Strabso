@@ -1,17 +1,24 @@
 body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
-  background: 
+  min-height: 100dvh;
+  min-height: 100vh; /* fallback */
+  background:
     radial-gradient(ellipse at 20% 80%, rgba(25, 35, 60, 0.4) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 20%, rgba(40, 20, 50, 0.3) 0%, transparent 50%),
     radial-gradient(ellipse at 50% 50%, rgba(15, 20, 40, 0.5) 0%, transparent 70%),
     linear-gradient(to bottom, #05050f 0%, #0a0a1a 30%, #0d1020 60%, #080812 100%);
   position: relative;
   overflow-x: hidden;
+  /* Ensure consistent box model */
+  box-sizing: border-box;
 }
 
-/* Animated glassy blobs - dark theme */
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Animated glassy blobs */
 body::before,
 body::after {
   content: '';
@@ -21,7 +28,7 @@ body::after {
   mix-blend-mode: screen;
   opacity: 0.15;
   animation: float 8s infinite ease-in-out;
-  pointer-events: none; /* Prevents blobs from blocking interactions */
+  pointer-events: none;
 }
 
 body::before {
@@ -53,17 +60,12 @@ h1, h2, h3, h4, h5, h6, p {
   margin-top: 40px;
 }
 
-/* Float animation keyframes */
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0) translateX(0);
-  }
-  50% {
-    transform: translateY(-20px) translateX(10px);
-  }
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50%       { transform: translateY(-20px) translateX(10px); }
 }
 
-/* ========== TABLET STYLES (768px - 1024px) ========== */
+/* ── Tablet (≤1024px) ─────────────────────────────────── */
 @media screen and (max-width: 1024px) {
   body::before {
     width: 400px;
@@ -72,7 +74,7 @@ h1, h2, h3, h4, h5, h6, p {
     left: 10%;
     filter: blur(60px);
   }
-  
+
   body::after {
     width: 300px;
     height: 300px;
@@ -80,22 +82,19 @@ h1, h2, h3, h4, h5, h6, p {
     right: 10%;
     filter: blur(60px);
   }
-  
-  .divider {
-    margin-top: 30px;
-  }
+
+  .divider { margin-top: 30px; }
 }
 
-/* ========== MOBILE STYLES (up to 767px) ========== */
+/* ── Mobile (≤767px) ──────────────────────────────────── */
 @media screen and (max-width: 767px) {
   body {
-    /* Simplified gradient for better mobile performance */
-    background: 
+    background:
       radial-gradient(ellipse at 30% 70%, rgba(25, 35, 60, 0.3) 0%, transparent 50%),
       radial-gradient(ellipse at 70% 30%, rgba(40, 20, 50, 0.2) 0%, transparent 50%),
       linear-gradient(to bottom, #05050f 0%, #0a0a1a 30%, #0d1020 60%, #080812 100%);
   }
-  
+
   body::before {
     width: 250px;
     height: 250px;
@@ -104,7 +103,7 @@ h1, h2, h3, h4, h5, h6, p {
     filter: blur(50px);
     opacity: 0.1;
   }
-  
+
   body::after {
     width: 200px;
     height: 200px;
@@ -113,32 +112,18 @@ h1, h2, h3, h4, h5, h6, p {
     filter: blur(50px);
     opacity: 0.1;
   }
-  
-  .divider {
-    margin-top: 24px;
-  }
+
+  .divider { margin-top: 24px; }
 }
 
-/* ========== SMALL MOBILE STYLES (up to 480px) ========== */
+/* ── Small mobile (≤480px) ───────────────────────────── */
 @media screen and (max-width: 480px) {
-  body::before {
-    width: 180px;
-    height: 180px;
-    filter: blur(40px);
-  }
-  
-  body::after {
-    width: 150px;
-    height: 150px;
-    filter: blur(40px);
-  }
-  
-  .divider {
-    margin-top: 20px;
-  }
+  body::before { width: 180px; height: 180px; filter: blur(40px); }
+  body::after  { width: 150px; height: 150px; filter: blur(40px); }
+  .divider { margin-top: 20px; }
 }
 
-/* ========== REDUCED MOTION (Accessibility) ========== */
+/* ── Reduced motion ───────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   body::before,
   body::after {

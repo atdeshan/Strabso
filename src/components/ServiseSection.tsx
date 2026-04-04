@@ -7,6 +7,8 @@ interface Service {
   title: string;
   description: string;
   accent: string;
+  highlights: string[];
+  stats: { value: string; label: string }[];
 }
 
 // Custom hook for intersection observer
@@ -117,11 +119,82 @@ const PromoterIcon = () => (
   </svg>
 );
 
+// Service Modal Component
+const ServiceModal: React.FC<{ service: Service; onClose: () => void }> = ({ service, onClose }) => {
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+
+  return (
+    <div className="modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
+      <div
+        className="modal-panel"
+        style={{ '--accent': service.accent } as React.CSSProperties}
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="modal-glow" />
+        <button className="modal-close" onClick={onClose} aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
+
+        <div className="modal-header-row">
+          <div className="modal-icon-wrapper">
+            <div className="modal-icon-ring" />
+            {service.icon}
+          </div>
+          <div>
+            <h2 className="modal-title">{service.title}</h2>
+            <div className="modal-divider" />
+          </div>
+        </div>
+
+        <p className="modal-description">{service.description}</p>
+
+        {/* Stats */}
+        <div className="modal-stats">
+          {service.stats.map((s, i) => (
+            <div key={i} className="modal-stat">
+              <span className="modal-stat-value">{s.value}</span>
+              <span className="modal-stat-label">{s.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Highlights */}
+        <div className="modal-highlights">
+          <p className="modal-highlights-title">What's included</p>
+          <ul className="modal-highlights-list">
+            {service.highlights.map((h, i) => (
+              <li key={i} className="modal-highlight-item">
+                <span className="modal-highlight-dot" />
+                {h}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <button className="modal-cta" onClick={onClose}>
+          Got it
+        </button>
+      </div>
+    </div>
+  );
+};
+
 // Service Card Component
-const ServiceCard: React.FC<{ service: Service; index: number; isInView: boolean }> = ({
+const ServiceCard: React.FC<{ service: Service; index: number; isInView: boolean; onExplore: (service: Service) => void }> = ({
   service,
   index,
   isInView,
+  onExplore,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -136,18 +209,15 @@ const ServiceCard: React.FC<{ service: Service; index: number; isInView: boolean
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className={`card-inner ${isInView ? 'animate-in' : ''}`}>
-        {/* Animated background gradient */}
         <div className="card-bg" />
         <div className="card-glow" />
-        
-        {/* Floating particles */}
+
         <div className="particles">
           {[...Array(5)].map((_, i) => (
             <span key={i} className="particle" style={{ '--i': i } as React.CSSProperties} />
           ))}
         </div>
 
-        {/* Content */}
         <div className="card-content">
           <div className={`icon-wrapper ${isHovered ? 'hovered' : ''}`}>
             <div className="icon-ring" />
@@ -156,11 +226,10 @@ const ServiceCard: React.FC<{ service: Service; index: number; isInView: boolean
           </div>
 
           <h3 className="card-title">{service.title}</h3>
-          
           <p className="card-description">{service.description}</p>
 
           <div className="card-footer">
-            <span className="learn-more">
+            <button className="learn-more" onClick={() => onExplore(service)}>
               Explore
               <svg viewBox="0 0 24 24" fill="none" className="arrow-icon">
                 <path
@@ -171,11 +240,10 @@ const ServiceCard: React.FC<{ service: Service; index: number; isInView: boolean
                   strokeLinejoin="round"
                 />
               </svg>
-            </span>
+            </button>
           </div>
         </div>
 
-        {/* Corner accent */}
         <div className="corner-accent" />
       </div>
     </div>
@@ -185,6 +253,7 @@ const ServiceCard: React.FC<{ service: Service; index: number; isInView: boolean
 // Main Component
 const ServicesSection: React.FC = () => {
   const { ref, isInView } = useInView(0.1);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   const services: Service[] = [
     {
@@ -194,6 +263,17 @@ const ServicesSection: React.FC = () => {
       description:
         'We bring your brand to life through engaging, on-ground experiences that capture attention, create emotional impact, and inspire meaningful connections with your target audience.',
       accent: '#4294f7',
+      highlights: [
+        'Tailored on-ground activation strategies',
+        'Trained brand ambassador teams',
+        'Real-time performance tracking',
+        'Post-activation analytics & reporting',
+      ],
+      stats: [
+        { value: '200+', label: 'Activations Done' },
+        { value: '9', label: 'Provinces Covered' },
+        { value: '98%', label: 'Client Satisfaction' },
+      ],
     },
     {
       id: 2,
@@ -202,6 +282,17 @@ const ServicesSection: React.FC = () => {
       description:
         'Strategic mall activations that maximize footfall and engagement, creating memorable brand experiences in high-traffic retail environments across Sri Lanka.',
       accent: '#8B5CF6',
+      highlights: [
+        'Premium mall locations island-wide',
+        'Interactive consumer engagement zones',
+        'Footfall & conversion measurement',
+        'Fully managed setup and teardown',
+      ],
+      stats: [
+        { value: '50+', label: 'Mall Venues' },
+        { value: '1M+', label: 'Consumers Reached' },
+        { value: '3x', label: 'Avg. Footfall Boost' },
+      ],
     },
     {
       id: 3,
@@ -210,6 +301,17 @@ const ServicesSection: React.FC = () => {
       description:
         'Mobile marketing excellence with nationwide roadshows and SMMT activations, taking your brand directly to communities across all 9 provinces.',
       accent: '#EC4899',
+      highlights: [
+        'Full nationwide route planning',
+        'Custom branded vehicles & structures',
+        'Community engagement at grassroots level',
+        'Live reporting from each location',
+      ],
+      stats: [
+        { value: '9', label: 'Provinces Reached' },
+        { value: '300+', label: 'Locations Visited' },
+        { value: '500K+', label: 'People Engaged' },
+      ],
     },
     {
       id: 4,
@@ -218,6 +320,17 @@ const ServicesSection: React.FC = () => {
       description:
         'Product sampling campaigns that put your offerings directly in the hands of consumers, driving trial, awareness, and conversion effectively.',
       accent: '#F59E0B',
+      highlights: [
+        'Targeted demographic profiling',
+        'High-volume sample distribution',
+        'Consumer feedback collection',
+        'Conversion rate optimisation',
+      ],
+      stats: [
+        { value: '2M+', label: 'Samples Distributed' },
+        { value: '40%', label: 'Avg. Trial-to-Purchase' },
+        { value: '100+', label: 'Brands Supported' },
+      ],
     },
     {
       id: 5,
@@ -226,6 +339,17 @@ const ServicesSection: React.FC = () => {
       description:
         'End-to-end selling operations with trained teams that drive sales, manage distribution, and deliver measurable results for your brand.',
       accent: '#10B981',
+      highlights: [
+        'Dedicated trained sales teams',
+        'Territory-based coverage planning',
+        'Daily sales reporting & KPIs',
+        'Flexible short & long-term deployment',
+      ],
+      stats: [
+        { value: '150+', label: 'Sales Specialists' },
+        { value: '25%', label: 'Avg. Sales Uplift' },
+        { value: '60+', label: 'Active Clients' },
+      ],
     },
     {
       id: 6,
@@ -234,6 +358,17 @@ const ServicesSection: React.FC = () => {
       description:
         'From corporate gatherings to large-scale public events, we plan, manage, and execute seamless experiences that leave lasting impressions.',
       accent: '#06B6D4',
+      highlights: [
+        'End-to-end event planning & logistics',
+        'Venue sourcing and setup',
+        'AV, staging & production management',
+        'Guest experience & crowd management',
+      ],
+      stats: [
+        { value: '120+', label: 'Events Executed' },
+        { value: '50K+', label: 'Max Event Attendance' },
+        { value: '100%', label: 'On-time Delivery' },
+      ],
     },
     {
       id: 7,
@@ -242,6 +377,17 @@ const ServicesSection: React.FC = () => {
       description:
         'Specialized activations for government and institutional clients, leveraging our strong relationships and expertise in public sector engagement.',
       accent: '#EF4444',
+      highlights: [
+        'Deep public sector expertise',
+        'Compliance-ready execution frameworks',
+        'Multi-stakeholder coordination',
+        'Nationwide institutional reach',
+      ],
+      stats: [
+        { value: '30+', label: 'Govt. Projects' },
+        { value: '25', label: 'Districts Covered' },
+        { value: '10+', label: 'Ministries Served' },
+      ],
     },
     {
       id: 8,
@@ -250,13 +396,23 @@ const ServicesSection: React.FC = () => {
       description:
         'Long-term promoter deployment solutions with trained brand ambassadors who represent your brand professionally across retail and field locations.',
       accent: '#14B8A6',
+      highlights: [
+        'Rigorous promoter screening & training',
+        'Ongoing performance monitoring',
+        'Retail & field deployment flexibility',
+        'Dedicated account management',
+      ],
+      stats: [
+        { value: '500+', label: 'Active Promoters' },
+        { value: '1000+', label: 'Retail Outlets Covered' },
+        { value: '95%', label: 'Retention Rate' },
+      ],
     },
   ];
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap');
 
         .services-section {
           --bg-primary: transparent;
@@ -953,6 +1109,232 @@ const ServicesSection: React.FC = () => {
           }
         }
 
+        /* ========== MODAL ========== */
+        .modal-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.75);
+          backdrop-filter: blur(8px);
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1.5rem;
+          animation: backdropIn 0.25s ease;
+        }
+
+        @keyframes backdropIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .modal-panel {
+          position: relative;
+          background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.85));
+          border: 1px solid var(--accent);
+          border-radius: 28px;
+          padding: 3rem 2.5rem 2.5rem;
+          max-width: 520px;
+          width: 100%;
+          overflow: hidden;
+          animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalIn {
+          from { opacity: 0; transform: scale(0.85) translateY(20px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-glow {
+          position: absolute;
+          top: -60%;
+          left: -40%;
+          width: 180%;
+          height: 180%;
+          background: radial-gradient(circle, var(--accent), transparent 55%);
+          opacity: 0.08;
+          pointer-events: none;
+        }
+
+        .modal-close {
+          position: absolute;
+          top: 1.25rem;
+          right: 1.25rem;
+          background: rgba(255,255,255,0.07);
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 50%;
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: rgba(255,255,255,0.6);
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+          background: rgba(255,255,255,0.14);
+          color: white;
+        }
+
+        .modal-icon-wrapper {
+          position: relative;
+          width: 80px;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--accent);
+          margin-bottom: 1.5rem;
+        }
+
+        .modal-icon-ring {
+          position: absolute;
+          inset: 0;
+          border: 2px solid var(--accent);
+          border-radius: 20px;
+          opacity: 0.35;
+        }
+
+        .modal-title {
+          font-family: 'Syne', sans-serif;
+          font-size: 1.75rem;
+          font-weight: 700;
+          color: #f8fafc;
+          margin-bottom: 1rem;
+        }
+
+        .modal-divider {
+          width: 48px;
+          height: 3px;
+          background: var(--accent);
+          border-radius: 2px;
+          margin-bottom: 1.25rem;
+          opacity: 0.8;
+        }
+
+        .modal-description {
+          font-size: 1.05rem;
+          line-height: 1.75;
+          color: rgba(255,255,255,0.72);
+          margin-bottom: 2rem;
+        }
+
+        .modal-header-row {
+          display: flex;
+          align-items: flex-start;
+          gap: 1.25rem;
+          margin-bottom: 1rem;
+        }
+
+        .modal-stats {
+          display: flex;
+          gap: 0;
+          margin-bottom: 1.5rem;
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px;
+          overflow: hidden;
+        }
+
+        .modal-stat {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 1rem 0.5rem;
+          border-right: 1px solid rgba(255,255,255,0.08);
+          background: rgba(255,255,255,0.03);
+        }
+
+        .modal-stat:last-child {
+          border-right: none;
+        }
+
+        .modal-stat-value {
+          font-family: 'Syne', sans-serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--accent);
+          line-height: 1;
+          margin-bottom: 0.35rem;
+        }
+
+        .modal-stat-label {
+          font-size: 0.72rem;
+          color: rgba(255,255,255,0.5);
+          text-align: center;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+        }
+
+        .modal-highlights {
+          margin-bottom: 2rem;
+        }
+
+        .modal-highlights-title {
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: rgba(255,255,255,0.4);
+          margin-bottom: 0.75rem;
+        }
+
+        .modal-highlights-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.6rem;
+        }
+
+        .modal-highlight-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 0.95rem;
+          color: rgba(255,255,255,0.75);
+          line-height: 1.4;
+        }
+
+        .modal-highlight-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: var(--accent);
+          flex-shrink: 0;
+          opacity: 0.85;
+        }
+
+        .modal-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.85rem 2rem;
+          background: var(--accent);
+          color: white;
+          font-size: 0.95rem;
+          font-weight: 600;
+          border: none;
+          border-radius: 50px;
+          cursor: pointer;
+          transition: all 0.25s ease;
+          letter-spacing: 0.02em;
+        }
+
+        .modal-cta:hover {
+          opacity: 0.88;
+          transform: translateY(-2px);
+        }
+
+        .learn-more {
+          background: none;
+          border: none;
+          padding: 0;
+        }
+
         /* ========== REDUCED MOTION (Accessibility) ========== */
         @media (prefers-reduced-motion: reduce) {
           .card-inner {
@@ -1107,11 +1489,19 @@ const ServicesSection: React.FC = () => {
                 service={service}
                 index={index}
                 isInView={isInView}
+                onExplore={setSelectedService}
               />
             ))}
           </div>
         </div>
       </section>
+
+      {selectedService && (
+        <ServiceModal
+          service={selectedService}
+          onClose={() => setSelectedService(null)}
+        />
+      )}
     </>
   );
 };

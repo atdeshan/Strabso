@@ -153,10 +153,8 @@ const ContactUs: React.FC = () => {
   };
 
   return (
-    <div style={styles.wrapper}>
+    <div style={styles.wrapper} className="contact-wrapper">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400&display=swap');
-        
         .contact-item {
           transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -190,42 +188,65 @@ const ContactUs: React.FC = () => {
         }
         
         @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(30px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        
+
         .animate-in {
           animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
         }
-        
+
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
         .delay-4 { animation-delay: 0.4s; }
         .delay-5 { animation-delay: 0.5s; }
         .delay-6 { animation-delay: 0.6s; }
+
+        /* ── Tablet ── */
+        @media (max-width: 1024px) {
+          .contact-wrapper { padding: 60px 24px !important; }
+          .contact-grid { gap: 20px !important; padding: 0 !important; }
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 767px) {
+          .contact-wrapper { padding: 48px 16px !important; }
+          .contact-header  { margin-bottom: 36px !important; }
+          .contact-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+            padding: 0 !important;
+          }
+          .contact-card { padding: 28px 20px !important; }
+          .contact-item:hover { transform: none; }
+        }
+
+        /* ── Touch devices ── */
+        @media (hover: none) and (pointer: coarse) {
+          .contact-item:hover { transform: none; }
+        }
+
+        /* ── Reduced motion ── */
+        @media (prefers-reduced-motion: reduce) {
+          .animate-in { animation: none; opacity: 1; }
+        }
       `}</style>
       
       <div style={styles.container}>
-        <div style={styles.headerSection}>
+        <div style={styles.headerSection} className="contact-header">
           <h1 className="animate-in delay-1" style={styles.title}>Let's Connect</h1>
           <p className="animate-in delay-2" style={styles.subtitle}>
             Ready to activate your brand across Sri Lanka? Get in touch with us to discuss your next activation, campaign, or event. We're here to bring your vision to life.
           </p>
         </div>
         
-        <div style={styles.contactGrid}>
+        <div style={styles.contactGrid} className="contact-grid">
           {contactItems.map((item, index) => (
-            <a 
-              key={index} 
+            <a
+              key={index}
               href={item.href}
-              className={`contact-item animate-in delay-${index + 3}`}
+              className={`contact-item contact-card animate-in delay-${index + 3}`}
               style={styles.contactCard}
             >
               <div className="icon-container" style={styles.iconContainer}>

@@ -34,33 +34,6 @@ const AboutUs: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  const teamMembers = [
-    {
-      name: 'Sarah Mitchell',
-      role: 'Founder & Creative Director',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=500&fit=crop',
-      description: 'With 15+ years in luxury events, Sarah brings visionary creativity to every project.',
-    },
-    {
-      name: 'James Chen',
-      role: 'Head of Operations',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop',
-      description: 'James ensures flawless execution with military precision and genuine care.',
-    },
-    {
-      name: 'Amara Okonkwo',
-      role: 'Brand Experience Lead',
-      image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=500&fit=crop',
-      description: 'Amara transforms brand visions into immersive, unforgettable experiences.',
-    },
-    {
-      name: 'David Rosenberg',
-      role: 'Technical Director',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=500&fit=crop',
-      description: 'David orchestrates the technical magic that brings events to life.',
-    },
-  ];
-
   const values = [
     {
       icon: (
@@ -112,7 +85,6 @@ const AboutUs: React.FC = () => {
   return (
     <div className="about-us-page">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap');
 
         .about-us-page {
           --color-bg: transparent;
@@ -241,62 +213,95 @@ const AboutUs: React.FC = () => {
         }
 
         .story-container {
-          max-width: 1200px;
+          max-width: 1100px;
           margin: 0 auto;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4rem;
+          display: flex;
+          flex-direction: column;
           align-items: center;
+          gap: 3rem;
         }
 
-        .story-image-wrapper {
-          position: relative;
+        .story-heading {
+          text-align: center;
         }
 
-        .story-image {
-          width: 100%;
-          height: 500px;
-          object-fit: cover;
-          border-radius: 12px;
-        }
-
-        .story-image-accent {
-          position: absolute;
-          bottom: -1.5rem;
-          right: -1.5rem;
-          width: 150px;
-          height: 150px;
-          border: 2px solid var(--color-accent);
-          border-radius: 12px;
-          z-index: -1;
-        }
-
-        .story-content h2 {
+        .story-heading h2 {
           font-family: var(--font-display);
           font-size: clamp(2rem, 5vw, 3rem);
           font-weight: 500;
-          margin-bottom: 1.5rem;
           line-height: 1.2;
+          margin-bottom: 1rem;
         }
 
-        .story-content h2 .accent {
+        .story-heading h2 .accent {
           font-style: italic;
           color: var(--color-accent);
         }
 
-        .story-content p {
+        .story-heading-line {
+          width: 60px;
+          height: 2px;
+          background: var(--color-accent);
+          margin: 0 auto;
+          opacity: 0.6;
+        }
+
+        .vision-mission-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          width: 100%;
+        }
+
+        .vm-card {
+          padding: 2.5rem;
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px;
+          background: rgba(255,255,255,0.03);
+          backdrop-filter: blur(10px);
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+          transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .vm-card:hover {
+          border-color: rgba(255,255,255,0.18);
+          transform: translateY(-4px);
+        }
+
+        .vm-card-icon {
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 12px;
+          background: rgba(255,255,255,0.06);
+          color: var(--color-accent);
+          flex-shrink: 0;
+        }
+
+        .vm-card-label {
+          font-size: 0.75rem;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: var(--color-accent);
+          font-weight: 500;
+        }
+
+        .vm-card-text {
           color: var(--color-text-muted);
-          font-size: clamp(0.95rem, 2vw, 1.1rem);
+          font-size: clamp(0.95rem, 1.8vw, 1.05rem);
           line-height: 1.9;
-          margin-bottom: 1.25rem;
         }
 
         .founder-quote {
-          margin-top: 2rem;
-          padding: 1.5rem;
+          width: 100%;
+          padding: 2rem 2.5rem;
           background: var(--color-bg-secondary);
           border-left: 3px solid var(--color-accent);
-          border-radius: 0 12px 12px 0;
+          border-radius: 0 16px 16px 0;
         }
 
         .founder-quote blockquote {
@@ -487,84 +492,6 @@ const AboutUs: React.FC = () => {
           box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
         }
 
-        /* Team Section */
-        .team-section {
-          padding: 6rem 1.5rem;
-          background: var(--color-bg-secondary);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-        }
-
-        .team-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 1.5rem;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-
-        .team-card {
-          position: relative;
-          border-radius: 16px;
-          overflow: hidden;
-          aspect-ratio: 3/4;
-        }
-
-        .team-card img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.6s ease;
-        }
-
-        .team-card:hover img {
-          transform: scale(1.1);
-        }
-
-        .team-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.5) 50%, transparent 100%);
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          padding: 1.25rem;
-          opacity: 0;
-          transition: opacity 0.4s ease;
-        }
-
-        .team-card:hover .team-overlay {
-          opacity: 1;
-        }
-
-        .team-info {
-          transform: translateY(20px);
-          transition: transform 0.4s ease;
-        }
-
-        .team-card:hover .team-info {
-          transform: translateY(0);
-        }
-
-        .team-name {
-          font-family: var(--font-display);
-          font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-          font-weight: 500;
-          margin-bottom: 0.25rem;
-        }
-
-        .team-role {
-          color: var(--color-accent);
-          font-size: 0.85rem;
-          margin-bottom: 0.5rem;
-        }
-
-        .team-description {
-          color: var(--color-text-muted);
-          font-size: 0.8rem;
-          line-height: 1.6;
-        }
-
         /* Stats Banner */
         .stats-banner {
           padding: 5rem 1.5rem;
@@ -732,17 +659,6 @@ const AboutUs: React.FC = () => {
             gap: 3rem;
           }
 
-          .story-image {
-            height: 400px;
-          }
-
-          .story-image-accent {
-            width: 120px;
-            height: 120px;
-            bottom: -1rem;
-            right: -1rem;
-          }
-
           .values-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 1.25rem;
@@ -761,11 +677,6 @@ const AboutUs: React.FC = () => {
           .value-svg-icon {
             width: 28px;
             height: 28px;
-          }
-
-          .team-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
           }
 
           .stats-grid {
@@ -797,15 +708,6 @@ const AboutUs: React.FC = () => {
             display: none;
           }
 
-          /* Show team overlay by default on tablet */
-          .team-overlay {
-            opacity: 1;
-            background: linear-gradient(to top, rgba(10, 10, 15, 0.9) 0%, rgba(10, 10, 15, 0.3) 60%, transparent 100%);
-          }
-
-          .team-info {
-            transform: translateY(0);
-          }
         }
 
         /* ========== MOBILE STYLES (up to 767px) ========== */
@@ -850,24 +752,16 @@ const AboutUs: React.FC = () => {
             gap: 2rem;
           }
 
-          .story-image {
-            height: 300px;
+          .vision-mission-grid {
+            grid-template-columns: 1fr;
           }
 
-          .story-image-accent {
-            width: 80px;
-            height: 80px;
-            bottom: -0.75rem;
-            right: -0.75rem;
-          }
-
-          .story-content p {
-            margin-bottom: 1rem;
+          .vm-card {
+            padding: 1.75rem;
           }
 
           .founder-quote {
-            margin-top: 1.5rem;
-            padding: 1.25rem;
+            padding: 1.25rem 1.5rem;
           }
 
           .values-section {
@@ -957,45 +851,6 @@ const AboutUs: React.FC = () => {
             font-size: 0.85rem;
           }
 
-          .team-section {
-            padding: 4rem 1rem;
-          }
-
-          .team-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            max-width: 400px;
-            margin: 0 auto;
-          }
-
-          .team-card {
-            aspect-ratio: 4/5;
-          }
-
-          .team-overlay {
-            opacity: 1;
-            padding: 1rem;
-            background: linear-gradient(to top, rgba(10, 10, 15, 0.95) 0%, rgba(10, 10, 15, 0.4) 50%, transparent 100%);
-          }
-
-          .team-info {
-            transform: translateY(0);
-          }
-
-          .team-name {
-            font-size: 1.25rem;
-          }
-
-          .team-role {
-            font-size: 0.8rem;
-            margin-bottom: 0.5rem;
-          }
-
-          .team-description {
-            font-size: 0.8rem;
-            line-height: 1.5;
-          }
-
           .stats-banner {
             padding: 3.5rem 1rem;
           }
@@ -1039,15 +894,6 @@ const AboutUs: React.FC = () => {
             padding: 3rem 1rem;
           }
 
-          .story-image {
-            height: 250px;
-            border-radius: 8px;
-          }
-
-          .story-image-accent {
-            display: none;
-          }
-
           .founder-quote {
             padding: 1rem;
           }
@@ -1072,10 +918,6 @@ const AboutUs: React.FC = () => {
             padding: 1rem;
           }
 
-          .team-section {
-            padding: 3rem 1rem;
-          }
-
           .stats-banner {
             padding: 3rem 1rem;
           }
@@ -1098,10 +940,6 @@ const AboutUs: React.FC = () => {
         @media (max-width: 360px) {
           .hero-content {
             padding: 0.75rem;
-          }
-
-          .story-image {
-            height: 220px;
           }
 
           .timeline-line {
@@ -1139,18 +977,6 @@ const AboutUs: React.FC = () => {
 
           .timeline-content:active {
             border-color: var(--color-accent);
-          }
-
-          .team-card:hover img {
-            transform: none;
-          }
-
-          .team-overlay {
-            opacity: 1;
-          }
-
-          .team-info {
-            transform: translateY(0);
           }
 
           .cta-button:hover {
@@ -1211,20 +1037,12 @@ const AboutUs: React.FC = () => {
             gap: 2rem;
           }
 
-          .story-image {
-            height: 280px;
-          }
-
           .values-grid {
             grid-template-columns: repeat(4, 1fr);
           }
 
           .value-card {
             padding: 1rem;
-          }
-
-          .team-grid {
-            grid-template-columns: repeat(4, 1fr);
           }
 
           .stats-grid {
@@ -1268,35 +1086,50 @@ const AboutUs: React.FC = () => {
       {/* Story Section */}
       <section className="story-section">
         <div className="story-container">
-          <div className="story-image-wrapper fade-up">
-            <img
-              src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=1000&fit=crop"
-              alt="Event venue with elegant lighting"
-              className="story-image"
-            />
-            {!isMobile && <div className="story-image-accent" />}
+          {/* Heading */}
+          <div className="story-heading fade-up">
+            <h2>Our <span className="accent">Vision</span> & Mission</h2>
+            <div className="story-heading-line" />
           </div>
-          <div className="story-content fade-up">
-            <h2>
-              Our <span className="accent">Vision</span> & Mission
-            </h2>
-            <p>
-              <strong>Vision:</strong> To identify ourselves as one of the top 5 agencies in the industry by 2025, while being the only agency providing a complete 360° solution to its clients.
-            </p>
-            <p>
-              <strong>Mission:</strong> To provide clients with a 360° business solution, reducing operational hassle, building long-term trust, and delivering high-quality execution at every touchpoint.
-            </p>
-            {!isMobile && (
-              <p>
-                We don't just plan events — we architect moments. From brand activations to corporate events, our approach combines strategic thinking with boundless creativity, ensuring every campaign delivers measurable results.
+
+          {/* Vision & Mission Cards */}
+          <div className="vision-mission-grid fade-up">
+            <div className="vm-card">
+              <div className="vm-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="3"/>
+                  <line x1="12" y1="2" x2="12" y2="5"/>
+                  <line x1="12" y1="19" x2="12" y2="22"/>
+                  <line x1="2" y1="12" x2="5" y2="12"/>
+                  <line x1="19" y1="12" x2="22" y2="12"/>
+                </svg>
+              </div>
+              <span className="vm-card-label">Vision</span>
+              <p className="vm-card-text">
+                To identify ourselves as one of the top 5 agencies in the industry by 2025, while being the only agency providing a complete 360° solution to its clients.
               </p>
-            )}
-            <div className="founder-quote">
-              <blockquote>
-                "We look forward to the opportunity to prove how we can elevate your brand to new heights."
-              </blockquote>
-              <cite>— Rumesh Chandrakumar, Founder</cite>
             </div>
+
+            <div className="vm-card">
+              <div className="vm-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+              </div>
+              <span className="vm-card-label">Mission</span>
+              <p className="vm-card-text">
+                To provide clients with a 360° business solution, reducing operational hassle, building long-term trust, and delivering high-quality execution at every touchpoint.
+              </p>
+            </div>
+          </div>
+
+          {/* Founder Quote */}
+          <div className="founder-quote fade-up">
+            <blockquote>
+              "We look forward to the opportunity to prove how we can elevate your brand to new heights."
+            </blockquote>
+            <cite>— Rumesh Chandrakumar, Founder</cite>
           </div>
         </div>
       </section>
@@ -1372,31 +1205,6 @@ const AboutUs: React.FC = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="team-section">
-        <div className="section-header fade-up">
-          <h2>
-            Meet Our <span className="accent">Team</span>
-          </h2>
-          <p>
-            The creative minds and strategic thinkers who bring your vision to life.
-          </p>
-        </div>
-        <div className="team-grid">
-          {teamMembers.map((member, index) => (
-            <div key={index} className="team-card fade-up" style={{ transitionDelay: `${index * 0.1}s` }}>
-              <img src={member.image} alt={member.name} />
-              <div className="team-overlay">
-                <div className="team-info">
-                  <h3 className="team-name">{member.name}</h3>
-                  <p className="team-role">{member.role}</p>
-                  <p className="team-description">{member.description}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="cta-section">

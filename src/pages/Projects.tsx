@@ -13,104 +13,103 @@ interface Project {
   color: string;
 }
 
-// Sample project data with photo collections
+// Build a gallery image URL using the Vite base path (e.g. /Strabso/)
+const BASE = import.meta.env.BASE_URL; // always ends with '/'
+function g(folder: string, file: string): string {
+  return `${BASE}gallery/${encodeURIComponent(folder)}/${encodeURIComponent(file)}`;
+}
+
+// Project data – images served from public/gallery/<folder>/
 const projects: Project[] = [
   {
     id: 1,
-    title: "Elephant House Ice Cream",
-    category: "National Activation",
-    location: "Island-wide",
-    year: "2024",
-    guests: "50K+",
-    coverImage: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=1200&q=80",
+    title: "Coca Cola Annual Business Con 2025",
+    category: "Business Conference",
+    location: "Colombo",
+    year: "2025",
+    guests: "500+",
+    coverImage: g("Coca Cola Annual Business Con 2025", "coca.jpg"),
     photos: [
-      "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=800&q=80",
-      "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=800&q=80",
-      "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=800&q=80",
-      "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=800&q=80",
-      "https://images.unsplash.com/photo-1488900128323-21503983a07e?w=800&q=80",
+      g("Coca Cola Annual Business Con 2025", "coca.jpg"),
+      g("Coca Cola Annual Business Con 2025", "coca1.jpg"),
+      g("Coca Cola Annual Business Con 2025", "coco2.jpg"),
+      g("Coca Cola Annual Business Con 2025", "coca3.jpg"),
+      g("Coca Cola Annual Business Con 2025", "coca4.jpg"),
     ],
     color: "#1a1a2e"
   },
   {
     id: 2,
-    title: "Watawala Tea Sampling",
-    category: "National Sampling",
-    location: "All 9 Provinces",
+    title: "Elephant House – Vibe SMMT Activation",
+    category: "Brand Activation",
+    location: "Island-wide",
     year: "2024",
-    guests: "100K+",
-    coverImage: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=1200&q=80",
+    guests: "50K+",
+    coverImage: g("Elephant House – Vibe SMMT Activation", "eh.jpg"),
     photos: [
-      "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=80",
-      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800&q=80",
-      "https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?w=800&q=80",
-      "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=800&q=80",
+      g("Elephant House – Vibe SMMT Activation", "eh.jpg"),
+      g("Elephant House – Vibe SMMT Activation", "eh1.jpg"),
+      g("Elephant House – Vibe SMMT Activation", "eh2.jpg"),
     ],
     color: "#2d3436"
   },
   {
     id: 3,
-    title: "LAUGFS Gas Activation",
-    category: "Brand Activation",
-    location: "Western Province",
+    title: "Roza Pasta – Christmas Mall Activation",
+    category: "Mall Activation",
+    location: "Colombo",
     year: "2024",
-    guests: "25K+",
-    coverImage: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80",
+    guests: "10K+",
+    coverImage: g("Roza Pasta – Christmas Mall Activation", "ro.jpg"),
     photos: [
-      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80",
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
-      "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80",
-      "https://images.unsplash.com/photo-1559223607-a43c990c692c?w=800&q=80",
-      "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&q=80",
+      g("Roza Pasta – Christmas Mall Activation", "ro.jpg"),
+      g("Roza Pasta – Christmas Mall Activation", "ro1.jpg"),
+      g("Roza Pasta – Christmas Mall Activation", "ro2.png"),
     ],
     color: "#0c0c1d"
   },
   {
     id: 4,
-    title: "Central Finance EPC Fair",
-    category: "Government Event",
-    location: "Uva Province",
-    year: "2023",
-    guests: "5K+",
-    coverImage: "https://images.unsplash.com/photo-1559223607-a43c990c692c?w=1200&q=80",
+    title: "Uswatta – Jo-Pet Big Match Selling Operation",
+    category: "Selling Operation",
+    location: "Island-wide",
+    year: "2024",
+    guests: "25K+",
+    coverImage: g("Uswatta – Jo-Pet Big Match- Selling Operation ", "us.jpg"),
     photos: [
-      "https://images.unsplash.com/photo-1559223607-a43c990c692c?w=800&q=80",
-      "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80",
-      "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80",
-      "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&q=80",
+      g("Uswatta – Jo-Pet Big Match- Selling Operation ", "us.jpg"),
+      g("Uswatta – Jo-Pet Big Match- Selling Operation ", "us1.jpg"),
     ],
     color: "#1e272e"
   },
   {
     id: 5,
-    title: "Maliban Ice Cream Launch",
-    category: "Product Launch",
-    location: "Colombo",
-    year: "2023",
-    guests: "10K+",
-    coverImage: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&q=80",
+    title: "Vivya – MT Activation",
+    category: "Modern Trade Activation",
+    location: "Island-wide",
+    year: "2024",
+    guests: "20K+",
+    coverImage: g("Vivya – MT Activation ", "vv.jpg"),
     photos: [
-      "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&q=80",
-      "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800&q=80",
-      "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&q=80",
-      "https://images.unsplash.com/photo-1496843916299-590492c751f4?w=800&q=80",
+      g("Vivya – MT Activation ", "vv.jpg"),
+      g("Vivya – MT Activation ", "vv1.jpg"),
+      g("Vivya – MT Activation ", "vv2.jpg"),
     ],
     color: "#192a56"
   },
   {
     id: 6,
-    title: "Solo National Roadshow",
-    category: "Roadshow",
-    location: "Island-wide",
+    title: "Xtra – SL & AFG One Day Cricket Tournament 2024",
+    category: "Sports Activation",
+    location: "Colombo",
     year: "2024",
-    guests: "75K+",
-    coverImage: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80",
+    guests: "30K+",
+    coverImage: g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext.jpg"),
     photos: [
-      "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80",
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80",
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
-      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&q=80",
-      "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=800&q=80",
+      g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext.jpg"),
+      g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext1.jpg"),
+      g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext2.jpg"),
+      g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext3.png"),
     ],
     color: "#192a56"
   }
@@ -165,6 +164,47 @@ const statsCards = [
     accentColor: "#ffd166"
   }
 ];
+
+// Lazy-loads a CSS background-image using IntersectionObserver
+const LazyBgImage: React.FC<{
+  src: string;
+  style?: React.CSSProperties;
+  className?: string;
+  children?: React.ReactNode;
+}> = ({ src, style, className, children }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setLoaded(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        ...style,
+        backgroundImage: loaded ? `url('${src}')` : 'none',
+        backgroundColor: loaded ? undefined : 'rgba(255,255,255,0.05)',
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 // Lightbox Component with responsive styles
 interface LightboxProps {
@@ -378,11 +418,12 @@ const Lightbox: React.FC<LightboxProps> = ({
             </svg>
           </button>
           
-          <img 
+          <img
             key={currentIndex}
-            src={photos[currentIndex]} 
+            src={photos[currentIndex]}
             alt={`${projectTitle} - Photo ${currentIndex + 1}`}
             style={responsiveLightboxStyles.mainImage}
+            decoding="async"
           />
           
           <button style={{ ...responsiveLightboxStyles.navBtn, right: '20px' }} onClick={onNext}>
@@ -413,7 +454,7 @@ const Lightbox: React.FC<LightboxProps> = ({
               }}
               onClick={() => onSelectPhoto(idx)}
             >
-              <img src={photo} alt="" style={responsiveLightboxStyles.thumbnailImg} />
+              <img src={photo} alt={`${projectTitle} photo ${idx + 1}`} style={responsiveLightboxStyles.thumbnailImg} loading="lazy" decoding="async" />
             </div>
           ))}
         </div>
@@ -901,8 +942,6 @@ const ProjectShowcase: React.FC = () => {
   return (
     <div ref={containerRef} style={responsiveStyles.container}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Outfit:wght@300;400;500&display=swap');
-        
         @keyframes slideUp {
           from { opacity: 0; transform: translateY(60px); }
           to { opacity: 1; transform: translateY(0); }
@@ -1164,12 +1203,10 @@ const ProjectShowcase: React.FC = () => {
               style={responsiveStyles.imageWrapper}
               onClick={() => openLightbox(project.id, 0)}
             >
-              <div 
+              <LazyBgImage
+                src={project.coverImage}
                 className="project-image"
-                style={{
-                  ...responsiveStyles.projectImage,
-                  backgroundImage: `url(${project.coverImage})`
-                }}
+                style={responsiveStyles.projectImage}
               />
               <div style={responsiveStyles.imageGradient} className="project-overlay" />
               
@@ -1204,7 +1241,7 @@ const ProjectShowcase: React.FC = () => {
                   }}
                   onClick={() => openLightbox(project.id, photoIndex)}
                 >
-                  <img src={photo} alt="" style={responsiveStyles.photoThumbImg} />
+                  <img src={photo} alt={`${project.title} photo ${photoIndex + 1}`} style={responsiveStyles.photoThumbImg} loading="lazy" decoding="async" />
                   <div style={responsiveStyles.photoOverlay} className="photo-overlay">
                     <svg width={isMobile ? "16" : "20"} height={isMobile ? "16" : "20"} viewBox="0 0 24 24" fill="none">
                       <path d="M15 3H21V9M21 3L13 11M10 6H6C4.89543 6 4 6.89543 4 8V18C4 19.1046 4.89543 20 6 20H16C17.1046 20 18 19.1046 18 18V14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1239,10 +1276,7 @@ const ProjectShowcase: React.FC = () => {
                   <span style={responsiveStyles.statLabel}>Year</span>
                   <span style={responsiveStyles.statValue}>{project.year}</span>
                 </div>
-                <div style={responsiveStyles.statItem}>
-                  <span style={responsiveStyles.statLabel}>Guests</span>
-                  <span style={responsiveStyles.statValue}>{project.guests}</span>
-                </div>
+
                 <div style={responsiveStyles.statItem}>
                   <span style={responsiveStyles.statLabel}>Photos</span>
                   <span style={responsiveStyles.statValue}>{project.photos.length}</span>

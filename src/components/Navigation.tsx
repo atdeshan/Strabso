@@ -32,6 +32,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabClick }) => {
                 <button
                   onClick={() => onTabClick(item.name)}
                   className={`nav-link ${activeTab === item.name ? "active" : ""}`}
+                  aria-current={activeTab === item.name ? "page" : undefined}
                 >
                   {item.name}
                   {activeTab === item.name && <div className="nav-link-pulse" />}
