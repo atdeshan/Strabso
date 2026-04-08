@@ -8,13 +8,11 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'three': ['three', '@react-three/fiber', '@react-three/drei'],
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'motion': ['framer-motion'],
         },
       },
     },
-    chunkSizeWarningLimit: 1200,
+    chunkSizeWarningLimit: 600,
     sourcemap: false,
   },
 })

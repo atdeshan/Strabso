@@ -1,25 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-// Project data type
+// ─── URL helper ────────────────────────────────────────────────────────────────
+const BASE = import.meta.env.BASE_URL;
+function g(folder: string, file: string): string {
+  return `${BASE}gallery/${encodeURIComponent(folder)}/${encodeURIComponent(file)}`;
+}
+
+// ─── Types ──────────────────────────────────────────────────────────────────────
 interface Project {
   id: number;
   title: string;
   category: string;
   location: string;
   year: string;
-  guests: string;
   coverImage: string;
   photos: string[];
-  color: string;
 }
 
-// Build a gallery image URL using the Vite base path (e.g. /Strabso/)
-const BASE = import.meta.env.BASE_URL; // always ends with '/'
-function g(folder: string, file: string): string {
-  return `${BASE}gallery/${encodeURIComponent(folder)}/${encodeURIComponent(file)}`;
-}
-
-// Project data – images served from public/gallery/<folder>/
+// ─── Project data ───────────────────────────────────────────────────────────────
 const projects: Project[] = [
   {
     id: 1,
@@ -27,31 +25,29 @@ const projects: Project[] = [
     category: "Business Conference",
     location: "Colombo",
     year: "2025",
-    guests: "500+",
-    coverImage: g("Coca Cola Annual Business Con 2025", "coca.jpg"),
+    coverImage: g("Coca Cola Annual Business Con 2025", "cover.jpg"),
     photos: [
-      g("Coca Cola Annual Business Con 2025", "coca.jpg"),
+      g("Coca Cola Annual Business Con 2025", "cover.jpg"),
       g("Coca Cola Annual Business Con 2025", "coca1.jpg"),
       g("Coca Cola Annual Business Con 2025", "coco2.jpg"),
       g("Coca Cola Annual Business Con 2025", "coca3.jpg"),
       g("Coca Cola Annual Business Con 2025", "coca4.jpg"),
     ],
-    color: "#1a1a2e"
   },
   {
     id: 2,
-    title: "Elephant House – Vibe SMMT Activation",
+    title: "Elephant House – Vibe Activations",
     category: "Brand Activation",
     location: "Island-wide",
-    year: "2024",
-    guests: "50K+",
-    coverImage: g("Elephant House – Vibe SMMT Activation", "eh.jpg"),
+    year: "2024–2025",
+    coverImage: g("Elephant House – Vibe SMMT Activation", "cover.jpg"),
     photos: [
+      g("Elephant House – Vibe SMMT Activation", "cover.jpg"),
       g("Elephant House – Vibe SMMT Activation", "eh.jpg"),
-      g("Elephant House – Vibe SMMT Activation", "eh1.jpg"),
       g("Elephant House – Vibe SMMT Activation", "eh2.jpg"),
+      g("Elephant House – Vibe SMMT Activation", "movie_cover.jpg"),
+      g("Elephant House – Vibe SMMT Activation", "movie_eh.jpg"),
     ],
-    color: "#2d3436"
   },
   {
     id: 3,
@@ -59,14 +55,12 @@ const projects: Project[] = [
     category: "Mall Activation",
     location: "Colombo",
     year: "2024",
-    guests: "10K+",
-    coverImage: g("Roza Pasta – Christmas Mall Activation", "ro.jpg"),
+    coverImage: g("Roza Pasta – Christmas Mall Activation", "cover.jpg"),
     photos: [
-      g("Roza Pasta – Christmas Mall Activation", "ro.jpg"),
+      g("Roza Pasta – Christmas Mall Activation", "cover.jpg"),
       g("Roza Pasta – Christmas Mall Activation", "ro1.jpg"),
       g("Roza Pasta – Christmas Mall Activation", "ro2.png"),
     ],
-    color: "#0c0c1d"
   },
   {
     id: 4,
@@ -74,13 +68,11 @@ const projects: Project[] = [
     category: "Selling Operation",
     location: "Island-wide",
     year: "2024",
-    guests: "25K+",
-    coverImage: g("Uswatta – Jo-Pet Big Match- Selling Operation ", "us.jpg"),
+    coverImage: g("Uswatta – Jo-Pet Big Match- Selling Operation ", "cover.jpg"),
     photos: [
-      g("Uswatta – Jo-Pet Big Match- Selling Operation ", "us.jpg"),
+      g("Uswatta – Jo-Pet Big Match- Selling Operation ", "cover.jpg"),
       g("Uswatta – Jo-Pet Big Match- Selling Operation ", "us1.jpg"),
     ],
-    color: "#1e272e"
   },
   {
     id: 5,
@@ -88,107 +80,124 @@ const projects: Project[] = [
     category: "Modern Trade Activation",
     location: "Island-wide",
     year: "2024",
-    guests: "20K+",
-    coverImage: g("Vivya – MT Activation ", "vv.jpg"),
+    coverImage: g("Vivya – MT Activation ", "cover.jpg"),
     photos: [
-      g("Vivya – MT Activation ", "vv.jpg"),
+      g("Vivya – MT Activation ", "cover.jpg"),
       g("Vivya – MT Activation ", "vv1.jpg"),
       g("Vivya – MT Activation ", "vv2.jpg"),
     ],
-    color: "#192a56"
   },
   {
     id: 6,
-    title: "Xtra – SL & AFG One Day Cricket Tournament 2024",
+    title: "Xtra – SL & AFG Cricket Tournament 2024",
     category: "Sports Activation",
     location: "Colombo",
     year: "2024",
-    guests: "30K+",
-    coverImage: g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext.jpg"),
+    coverImage: g("Xtra – SL AFG One Day Cricket Tournament 2024", "cover.jpg"),
     photos: [
-      g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext.jpg"),
+      g("Xtra – SL AFG One Day Cricket Tournament 2024", "cover.jpg"),
       g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext1.jpg"),
       g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext2.jpg"),
       g("Xtra – SL AFG One Day Cricket Tournament 2024", "ext3.png"),
     ],
-    color: "#192a56"
-  }
-];
-
-// Stats cards data
-const statsCards = [
-  {
-    id: 1,
-    number: "100+",
-    label: "Activations",
-    description: "Successful brand activations delivered nationwide",
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-    gradient: "linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 107, 107, 0.05) 100%)",
-    accentColor: "#ff6b6b"
   },
   {
-    id: 2,
-    number: "25+",
-    label: "Brand Partners",
-    description: "Trusted by leading brands in Sri Lanka",
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-        <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-    gradient: "linear-gradient(135deg, rgba(78, 205, 196, 0.15) 0%, rgba(78, 205, 196, 0.05) 100%)",
-    accentColor: "#4ecdc4"
+    id: 7,
+    title: "Maliban – Non Fat Mall Activation",
+    category: "Mall Activation",
+    location: "Colombo",
+    year: "2025",
+    coverImage: g("Maliban - Non Fat Mall Activation", "cover.jpg"),
+    photos: [
+      g("Maliban - Non Fat Mall Activation", "cover.jpg"),
+      g("Maliban - Non Fat Mall Activation", "mal.jpg"),
+      g("Maliban - Non Fat Mall Activation", "mal1.jpg"),
+    ],
   },
   {
-    id: 3,
-    number: "9",
-    label: "Provinces",
-    description: "Island-wide reach across Sri Lanka",
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5"/>
-        <path d="M2 12H22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        <path d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z" stroke="currentColor" strokeWidth="1.5"/>
-      </svg>
-    ),
-    gradient: "linear-gradient(135deg, rgba(255, 209, 102, 0.15) 0%, rgba(255, 209, 102, 0.05) 100%)",
-    accentColor: "#ffd166"
-  }
+    id: 8,
+    title: "Anchor – Nallur Festival Door to Door",
+    category: "Door to Door Activation",
+    location: "Jaffna",
+    year: "2025",
+    coverImage: g("Anchor - Nallur Festival - Door to Door Activation", "cover.jpg"),
+    photos: [
+      g("Anchor - Nallur Festival - Door to Door Activation", "cover.jpg"),
+      g("Anchor - Nallur Festival - Door to Door Activation", "ac.jpg"),
+    ],
+  },
+  {
+    id: 9,
+    title: "Kesha – Office Activation",
+    category: "Office Activation",
+    location: "Colombo",
+    year: "2025",
+    coverImage: g("Kesha - Office Activation", "cover.jpg"),
+    photos: [
+      g("Kesha - Office Activation", "cover.jpg"),
+      g("Kesha - Office Activation", "ks1.jpg"),
+    ],
+  },
+  {
+    id: 10,
+    title: "Lanka Soy – Town Activation",
+    category: "Town Activation",
+    location: "Island-wide",
+    year: "2025",
+    coverImage: g("Lanka Soy Town Activation", "cover.jpg"),
+    photos: [
+      g("Lanka Soy Town Activation", "cover.jpg"),
+      g("Lanka Soy Town Activation", "ls.jpg"),
+      g("Lanka Soy Town Activation", "ls1.jpg"),
+    ],
+  },
+  {
+    id: 11,
+    title: "Sting – Holy Activation",
+    category: "Brand Activation",
+    location: "Island-wide",
+    year: "2025",
+    coverImage: g("Sting - Holy Activation", "cover.jpg"),
+    photos: [
+      g("Sting - Holy Activation", "cover.jpg"),
+      g("Sting - Holy Activation", "stng.jpg"),
+    ],
+  },
+  {
+    id: 12,
+    title: "HNB – SOLO Merchant Activation",
+    category: "Merchant Activation",
+    location: "Island-wide",
+    year: "2025",
+    coverImage: g("HNB - SOLO Merchant Activation", "cover.jpg"),
+    photos: [
+      g("HNB - SOLO Merchant Activation", "cover.jpg"),
+      g("HNB - SOLO Merchant Activation", "hnb.jpg"),
+      g("HNB - SOLO Merchant Activation", "hnb1.jpg"),
+    ],
+  },
 ];
 
-// Lazy-loads a CSS background-image using IntersectionObserver
-const LazyBgImage: React.FC<{
-  src: string;
-  style?: React.CSSProperties;
-  className?: string;
-  children?: React.ReactNode;
-}> = ({ src, style, className, children }) => {
+const stats = [
+  { number: "100+", label: "Activations" },
+  { number: "25+",  label: "Brand Partners" },
+  { number: "9",    label: "Provinces" },
+];
+
+// ─── Lazy background image ──────────────────────────────────────────────────────
+const LazyBg: React.FC<{ src: string; className?: string }> = ({ src, className }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setLoaded(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '200px' }
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setLoaded(true); obs.disconnect(); } },
+      { rootMargin: '300px' }
     );
-    observer.observe(el);
-    return () => observer.disconnect();
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   return (
@@ -196,1098 +205,570 @@ const LazyBgImage: React.FC<{
       ref={ref}
       className={className}
       style={{
-        ...style,
         backgroundImage: loaded ? `url('${src}')` : 'none',
-        backgroundColor: loaded ? undefined : 'rgba(255,255,255,0.05)',
+        backgroundColor: loaded ? undefined : 'rgba(255,255,255,0.04)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        width: '100%',
+        height: '100%',
+        transition: 'background-image 0.3s ease',
       }}
-    >
-      {children}
-    </div>
+    />
   );
 };
 
-// Lightbox Component with responsive styles
-interface LightboxProps {
-  photos: string[];
-  currentIndex: number;
+// ─── Lightbox ───────────────────────────────────────────────────────────────────
+const Lightbox: React.FC<{
+  project: Project;
+  startIndex: number;
   onClose: () => void;
-  onNext: () => void;
-  onPrev: () => void;
-  onSelectPhoto: (index: number) => void;
-  projectTitle: string;
-  isMobile: boolean;
-}
+}> = ({ project, startIndex, onClose }) => {
+  const [idx, setIdx] = useState(startIndex);
+  const touchX = useRef<number | null>(null);
 
-const Lightbox: React.FC<LightboxProps> = ({ 
-  photos, 
-  currentIndex, 
-  onClose, 
-  onNext, 
-  onPrev, 
-  onSelectPhoto,
-  projectTitle,
-  isMobile
-}) => {
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-
-  // Swipe detection for mobile
-  const minSwipeDistance = 50;
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-    if (isLeftSwipe) onNext();
-    if (isRightSwipe) onPrev();
-  };
+  const prev = useCallback(() => setIdx(i => (i - 1 + project.photos.length) % project.photos.length), [project.photos.length]);
+  const next = useCallback(() => setIdx(i => (i + 1) % project.photos.length), [project.photos.length]);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight') onNext();
-      if (e.key === 'ArrowLeft') onPrev();
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
     };
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'auto';
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
     };
-  }, [onClose, onNext, onPrev]);
-
-  const responsiveLightboxStyles: { [key: string]: React.CSSProperties } = {
-    overlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.98)',
-      zIndex: 10000,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      animation: 'fadeIn 0.3s ease',
-    },
-    content: {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: isMobile ? '10px' : '20px',
-    },
-    closeBtn: {
-      position: 'absolute',
-      top: isMobile ? '10px' : '20px',
-      right: isMobile ? '10px' : '20px',
-      background: 'rgba(255, 255, 255, 0.1)',
-      border: 'none',
-      borderRadius: '50%',
-      width: isMobile ? '44px' : '50px',
-      height: isMobile ? '44px' : '50px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      cursor: 'pointer',
-      color: 'white',
-      transition: 'all 0.3s ease',
-      zIndex: 10,
-    },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: isMobile ? '0 10px' : '0 60px',
-      marginBottom: isMobile ? '10px' : '20px',
-      marginTop: isMobile ? '50px' : '0',
-    },
-    projectName: {
-      fontFamily: "'Playfair Display', serif",
-      fontSize: isMobile ? '18px' : '24px',
-      color: 'white',
-    },
-    counter: {
-      fontFamily: "'Outfit', sans-serif",
-      fontSize: isMobile ? '12px' : '14px',
-      letterSpacing: '2px',
-      color: 'rgba(255, 255, 255, 0.6)',
-    },
-    imageContainer: {
-      flex: 1,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-      overflow: 'hidden',
-    },
-    mainImage: {
-      maxWidth: isMobile ? '95%' : '85%',
-      maxHeight: isMobile ? '60vh' : '70vh',
-      objectFit: 'contain',
-      borderRadius: '8px',
-      animation: 'scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-    },
-    navBtn: {
-      position: 'absolute',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      background: 'rgba(255, 255, 255, 0.1)',
-      border: 'none',
-      borderRadius: '50%',
-      width: isMobile ? '44px' : '60px',
-      height: isMobile ? '44px' : '60px',
-      display: isMobile ? 'none' : 'flex', // Hide nav buttons on mobile (use swipe)
-      alignItems: 'center',
-      justifyContent: 'center',
-      cursor: 'pointer',
-      color: 'white',
-      transition: 'all 0.3s ease',
-      backdropFilter: 'blur(10px)',
-    },
-    thumbnailStrip: {
-      display: 'flex',
-      justifyContent: isMobile ? 'flex-start' : 'center',
-      gap: isMobile ? '8px' : '12px',
-      padding: isMobile ? '15px 0' : '20px 0',
-      overflowX: 'auto',
-      WebkitOverflowScrolling: 'touch',
-    },
-    thumbnail: {
-      width: isMobile ? '60px' : '80px',
-      height: isMobile ? '45px' : '60px',
-      borderRadius: '6px',
-      overflow: 'hidden',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-      flexShrink: 0,
-    },
-    thumbnailImg: {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-    },
-    swipeHint: {
-      display: isMobile ? 'flex' : 'none',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '8px',
-      color: 'rgba(255, 255, 255, 0.4)',
-      fontSize: '12px',
-      marginTop: '10px',
-    },
-  };
+  }, [onClose, next, prev]);
 
   return (
-    <div style={responsiveLightboxStyles.overlay} onClick={onClose}>
-      <div 
-        style={responsiveLightboxStyles.content} 
-        onClick={(e) => e.stopPropagation()}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-      >
-        {/* Close Button */}
-        <button style={responsiveLightboxStyles.closeBtn} onClick={onClose}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-        </button>
-
+    <div
+      className="lb-overlay"
+      onClick={onClose}
+      onTouchStart={e => { touchX.current = e.touches[0].clientX; }}
+      onTouchEnd={e => {
+        if (touchX.current === null) return;
+        const dx = touchX.current - e.changedTouches[0].clientX;
+        if (Math.abs(dx) > 50) dx > 0 ? next() : prev();
+        touchX.current = null;
+      }}
+    >
+      <div className="lb-box" onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div style={responsiveLightboxStyles.header}>
-          <span style={responsiveLightboxStyles.projectName}>{projectTitle}</span>
-          <span style={responsiveLightboxStyles.counter}>{currentIndex + 1} / {photos.length}</span>
+        <div className="lb-header">
+          <span className="lb-title">{project.title}</span>
+          <div className="lb-header-right">
+            <span className="lb-counter">{idx + 1} / {project.photos.length}</span>
+            <button className="lb-close" onClick={onClose} aria-label="Close">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
-        {/* Main Image */}
-        <div style={responsiveLightboxStyles.imageContainer}>
-          <button style={{ ...responsiveLightboxStyles.navBtn, left: '20px' }} onClick={onPrev}>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        {/* Main image */}
+        <div className="lb-img-wrap">
+          <button className="lb-nav lb-nav-prev" onClick={prev} aria-label="Previous">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18L9 12l6-6"/>
             </svg>
           </button>
-          
           <img
-            key={currentIndex}
-            src={photos[currentIndex]}
-            alt={`${projectTitle} - Photo ${currentIndex + 1}`}
-            style={responsiveLightboxStyles.mainImage}
+            key={idx}
+            src={project.photos[idx]}
+            alt={`${project.title} ${idx + 1}`}
+            className="lb-img"
             decoding="async"
           />
-          
-          <button style={{ ...responsiveLightboxStyles.navBtn, right: '20px' }} onClick={onNext}>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-              <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <button className="lb-nav lb-nav-next" onClick={next} aria-label="Next">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 18l6-6-6-6"/>
             </svg>
           </button>
-        </div>
-
-        {/* Swipe hint for mobile */}
-        <div style={responsiveLightboxStyles.swipeHint}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M14 8l4 4-4 4M10 16l-4-4 4-4" />
-          </svg>
-          Swipe to navigate
         </div>
 
         {/* Thumbnails */}
-        <div style={responsiveLightboxStyles.thumbnailStrip}>
-          {photos.map((photo, idx) => (
-            <div
-              key={idx}
-              style={{
-                ...responsiveLightboxStyles.thumbnail,
-                opacity: idx === currentIndex ? 1 : 0.4,
-                transform: idx === currentIndex ? 'scale(1.1)' : 'scale(1)',
-                border: idx === currentIndex ? '2px solid white' : '2px solid transparent',
-              }}
-              onClick={() => onSelectPhoto(idx)}
-            >
-              <img src={photo} alt={`${projectTitle} photo ${idx + 1}`} style={responsiveLightboxStyles.thumbnailImg} loading="lazy" decoding="async" />
-            </div>
-          ))}
-        </div>
+        {project.photos.length > 1 && (
+          <div className="lb-thumbs">
+            {project.photos.map((p, i) => (
+              <button
+                key={i}
+                className={`lb-thumb${i === idx ? ' lb-thumb-active' : ''}`}
+                onClick={() => setIdx(i)}
+                aria-label={`Photo ${i + 1}`}
+              >
+                <img src={p} alt="" loading="lazy" decoding="async" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Mobile swipe hint */}
+        <p className="lb-swipe-hint">Swipe to navigate</p>
       </div>
     </div>
   );
 };
 
-// Stats Card Component with responsive styles
-const StatsCard: React.FC<{ card: typeof statsCards[0]; index: number; isMobile: boolean; isTablet: boolean }> = ({ 
-  card, 
-  index, 
-  isMobile,
-  isTablet 
-}) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
-  const responsiveCardStyles: { [key: string]: React.CSSProperties } = {
-    card: {
-      position: 'relative',
-      padding: isMobile ? '24px' : isTablet ? '28px' : '32px',
-      borderRadius: isMobile ? '16px' : '20px',
-      border: '1px solid rgba(255, 255, 255, 0.08)',
-      backdropFilter: 'blur(20px)',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      gap: isMobile ? '8px' : '12px',
-      transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-      cursor: 'default',
-      overflow: 'hidden',
-      animation: 'cardSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-      opacity: 0,
-      background: card.gradient,
-      animationDelay: `${index * 0.15}s`,
-      transform: isHovered && !isMobile ? 'translateY(-8px) scale(1.02)' : 'translateY(0) scale(1)',
-      boxShadow: isHovered && !isMobile
-        ? `0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px ${card.accentColor}30`
-        : '0 10px 40px -15px rgba(0, 0, 0, 0.3)',
-    },
-    cornerDecoration: {
-      position: 'absolute',
-      top: isMobile ? '12px' : '16px',
-      right: isMobile ? '12px' : '16px',
-      width: isMobile ? '20px' : '24px',
-      height: isMobile ? '20px' : '24px',
-      borderTop: '2px solid',
-      borderRight: '2px solid',
-      borderRadius: '0 8px 0 0',
-      transition: 'all 0.4s ease',
-      borderColor: card.accentColor,
-      opacity: isHovered ? 1 : 0.3,
-    },
-    iconWrapper: {
-      padding: isMobile ? '10px' : '14px',
-      borderRadius: isMobile ? '10px' : '14px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-      marginBottom: isMobile ? '4px' : '8px',
-      color: card.accentColor,
-      background: `${card.accentColor}15`,
-      transform: isHovered && !isMobile ? 'scale(1.1) rotate(5deg)' : 'scale(1) rotate(0deg)',
-    },
-    number: {
-      fontSize: isMobile ? '36px' : isTablet ? '42px' : '48px',
-      fontFamily: "'Playfair Display', serif",
-      fontWeight: 600,
-      lineHeight: 1,
-      letterSpacing: '-2px',
-      color: card.accentColor,
-    },
-    label: {
-      fontSize: isMobile ? '14px' : '16px',
-      fontWeight: 500,
-      letterSpacing: '1px',
-      textTransform: 'uppercase',
-      color: 'rgba(255, 255, 255, 0.9)',
-    },
-    description: {
-      fontSize: isMobile ? '12px' : '14px',
-      color: 'rgba(255, 255, 255, 0.5)',
-      lineHeight: 1.5,
-      transition: 'opacity 0.4s ease',
-      opacity: isHovered ? 1 : 0.6,
-    },
-    accentLine: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      height: '3px',
-      borderRadius: '3px 3px 0 0',
-      transition: 'width 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-      background: card.accentColor,
-      width: isHovered ? '100%' : '40%',
-    },
-    icon: {
-      width: isMobile ? '24px' : '32px',
-      height: isMobile ? '24px' : '32px',
-    },
-  };
-  
-  return (
-    <div
-      className="stats-card"
-      style={responsiveCardStyles.card}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Decorative corner */}
-      <div style={responsiveCardStyles.cornerDecoration} />
-      
-      {/* Icon */}
-      <div style={responsiveCardStyles.iconWrapper}>
-        <div style={responsiveCardStyles.icon}>
-          {card.icon}
-        </div>
+// ─── Project card ───────────────────────────────────────────────────────────────
+const ProjectCard: React.FC<{ project: Project; index: number; onOpen: (id: number) => void }> = ({ project, index, onOpen }) => (
+  <article
+    className="pc-card"
+    style={{ animationDelay: `${(index % 4) * 0.08}s` }}
+    onClick={() => onOpen(project.id)}
+    role="button"
+    tabIndex={0}
+    aria-label={`View ${project.title} gallery`}
+    onKeyDown={e => e.key === 'Enter' && onOpen(project.id)}
+  >
+    <div className="pc-img-wrap">
+      <LazyBg src={project.coverImage} className="pc-img" />
+      <div className="pc-overlay" />
+      <div className="pc-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
+          <path d="M21 15L16 10 5 21" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        {project.photos.length}
       </div>
-      
-      {/* Number */}
-      <div style={responsiveCardStyles.number}>
-        {card.number}
+      <div className="pc-cta">
+        <span>View Gallery</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M7 17L17 7M17 7H7M17 7v10"/>
+        </svg>
       </div>
-      
-      {/* Label */}
-      <div style={responsiveCardStyles.label}>
-        {card.label}
-      </div>
-      
-      {/* Description */}
-      <div style={responsiveCardStyles.description}>
-        {card.description}
-      </div>
-      
-      {/* Bottom accent line */}
-      <div style={responsiveCardStyles.accentLine} />
     </div>
-  );
-};
+    <div className="pc-info">
+      <span className="pc-category">{project.category}</span>
+      <h3 className="pc-title">{project.title}</h3>
+      <div className="pc-meta">
+        <span>{project.location}</span>
+        <span className="pc-dot">·</span>
+        <span>{project.year}</span>
+      </div>
+    </div>
+  </article>
+);
 
-const ProjectShowcase: React.FC = () => {
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [lightbox, setLightbox] = useState<{ projectId: number; photoIndex: number } | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Detect screen size
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth <= 767);
-      setIsTablet(window.innerWidth > 767 && window.innerWidth <= 1024);
-    };
-    
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
-
-  useEffect(() => {
-    // Only track cursor on non-touch devices
-    if (isMobile || isTablet) return;
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isMobile, isTablet]);
-
-  const openLightbox = (projectId: number, photoIndex: number) => {
-    setLightbox({ projectId, photoIndex });
-  };
-
-  const closeLightbox = () => {
-    setLightbox(null);
-  };
-
-  const currentProject = lightbox ? projects.find(p => p.id === lightbox.projectId) : null;
-
-  const nextPhoto = () => {
-    if (lightbox && currentProject) {
-      setLightbox({
-        ...lightbox,
-        photoIndex: (lightbox.photoIndex + 1) % currentProject.photos.length
-      });
-    }
-  };
-
-  const prevPhoto = () => {
-    if (lightbox && currentProject) {
-      setLightbox({
-        ...lightbox,
-        photoIndex: (lightbox.photoIndex - 1 + currentProject.photos.length) % currentProject.photos.length
-      });
-    }
-  };
-
-  const selectPhoto = (index: number) => {
-    if (lightbox) {
-      setLightbox({ ...lightbox, photoIndex: index });
-    }
-  };
-
-  // Responsive styles
-  const getResponsiveStyles = (): { [key: string]: React.CSSProperties } => ({
-    container: {
-      minHeight: '100vh',
-      backgroundColor: 'transparent',
-      color: '#ffffff',
-      fontFamily: "'Outfit', sans-serif",
-      position: 'relative',
-      overflow: 'hidden',
-      padding: isMobile ? '30px 16px' : isTablet ? '40px 24px' : '60px 40px',
-    },
-    backgroundGradient: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'radial-gradient(ellipse at 20% 20%, rgba(120, 80, 160, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(80, 120, 160, 0.1) 0%, transparent 50%)',
-      pointerEvents: 'none',
-    },
-    noiseOverlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      opacity: 0.03,
-      backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-      pointerEvents: 'none',
-    },
-    header: {
-      maxWidth: '1400px',
-      margin: isMobile ? '0 auto 40px' : '0 auto 60px',
-      position: 'relative',
-    },
-    mainTitle: {
-      fontSize: isMobile ? 'clamp(36px, 12vw, 48px)' : isTablet ? 'clamp(48px, 8vw, 80px)' : 'clamp(48px, 10vw, 120px)',
-      fontFamily: "'Playfair Display', serif",
-      fontWeight: 400,
-      lineHeight: 1,
-      margin: 0,
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    titleLine: {
-      display: 'block',
-      color: 'rgba(255, 255, 255, 0.9)',
-    },
-    titleLineAccent: {
-      display: 'block',
-      fontStyle: 'italic',
-      background: 'linear-gradient(135deg, #f0261b 0%, #0095ff 50%, #09ff00 100%)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      backgroundClip: 'text',
-    },
-    headerLine: {
-      width: isMobile ? '60px' : '80px',
-      height: '2px',
-      background: 'rgba(255, 255, 255, 0.3)',
-      marginTop: isMobile ? '20px' : '30px',
-    },
-    statsSection: {
-      maxWidth: '1400px',
-      margin: isMobile ? '0 auto 50px' : '0 auto 80px',
-    },
-    statsGrid: {
-      display: 'grid',
-      gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-      gap: isMobile ? '16px' : '24px',
-    },
-    projectsContainer: {
-      maxWidth: '1400px',
-      margin: '0 auto',
-      display: 'grid',
-      gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(350px, 1fr))',
-      gap: isMobile ? '50px' : isTablet ? '40px' : '80px',
-    },
-    projectItem: {
-      position: 'relative',
-      cursor: 'pointer',
-    },
-    projectNumber: {
-      position: 'absolute',
-      top: isMobile ? '-15px' : '-20px',
-      left: isMobile ? '-5px' : '-10px',
-      fontSize: isMobile ? '80px' : isTablet ? '100px' : '120px',
-      fontFamily: "'Playfair Display', serif",
-      fontWeight: 400,
-      color: 'rgba(255, 255, 255, 0.08)',
-      lineHeight: 1,
-      transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-      zIndex: 0,
-      pointerEvents: 'none',
-    },
-    imageWrapper: {
-      position: 'relative',
-      aspectRatio: isMobile ? '3/4' : '4/5',
-      borderRadius: isMobile ? '12px' : '8px',
-      overflow: 'hidden',
-      marginBottom: isMobile ? '12px' : '16px',
-    },
-    projectImage: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-    },
-    imageGradient: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%)',
-      opacity: isMobile ? 0.6 : 0, // Always visible on mobile
-      transition: 'opacity 0.5s ease',
-    },
-    photoCountBadge: {
-      position: 'absolute',
-      top: isMobile ? '12px' : '16px',
-      right: isMobile ? '12px' : '16px',
-      background: 'rgba(0, 0, 0, 0.6)',
-      backdropFilter: 'blur(10px)',
-      padding: isMobile ? '6px 10px' : '8px 14px',
-      borderRadius: '20px',
-      fontSize: isMobile ? '11px' : '12px',
-      fontWeight: 500,
-      letterSpacing: '1px',
-      display: 'flex',
-      alignItems: 'center',
-      color: 'white',
-    },
-    viewProject: {
-      position: 'absolute',
-      bottom: isMobile ? '16px' : '24px',
-      left: isMobile ? '16px' : '24px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: isMobile ? '8px' : '12px',
-      opacity: isMobile ? 1 : 0, // Always visible on mobile
-      transform: isMobile ? 'translateY(0)' : 'translateY(20px)',
-      transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-    },
-    viewProjectText: {
-      fontSize: isMobile ? '11px' : '13px',
-      letterSpacing: '2px',
-      textTransform: 'uppercase',
-      fontWeight: 500,
-    },
-    arrowIcon: {
-      width: isMobile ? '16px' : '20px',
-      height: isMobile ? '16px' : '20px',
-    },
-    photoGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
-      gap: isMobile ? '6px' : '8px',
-      marginBottom: isMobile ? '16px' : '20px',
-      opacity: isMobile ? 1 : 0.7, // Always visible on mobile
-      transform: 'translateY(0)',
-      transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-    },
-    photoThumb: {
-      aspectRatio: '1',
-      borderRadius: isMobile ? '4px' : '6px',
-      overflow: 'hidden',
-      position: 'relative',
-      cursor: 'pointer',
-      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-    },
-    photoThumbImg: {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-    },
-    photoOverlay: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(0, 0, 0, 0.5)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      opacity: 0,
-      transition: 'opacity 0.3s ease',
-      color: 'white',
-    },
-    morePhotos: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(0, 0, 0, 0.7)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: isMobile ? '14px' : '18px',
-      fontWeight: 600,
-      fontFamily: "'Playfair Display', serif",
-      color: 'white',
-    },
-    projectInfo: {
-      position: 'relative',
-      zIndex: 1,
-    },
-    projectMeta: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: isMobile ? '10px' : '16px',
-      marginBottom: isMobile ? '8px' : '12px',
-      flexWrap: 'wrap',
-    },
-    projectCategory: {
-      fontSize: isMobile ? '10px' : '11px',
-      letterSpacing: '2px',
-      textTransform: 'uppercase',
-      color: 'rgba(255, 255, 255, 0.5)',
-    },
-    projectMetaLine: {
-      height: '1px',
-      width: isMobile ? '30px' : '40px',
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-      transition: 'width 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-    },
-    projectLocation: {
-      fontSize: isMobile ? '10px' : '11px',
-      letterSpacing: '2px',
-      textTransform: 'uppercase',
-      color: 'rgba(255, 255, 255, 0.5)',
-    },
-    projectTitle: {
-      margin: isMobile ? '0 0 12px' : '0 0 16px',
-    },
-    projectTitleText: {
-      fontSize: isMobile ? 'clamp(24px, 6vw, 32px)' : isTablet ? 'clamp(28px, 4vw, 36px)' : 'clamp(28px, 4vw, 40px)',
-      fontFamily: "'Playfair Display', serif",
-      fontWeight: 400,
-      backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.3))',
-      backgroundSize: '0% 2px',
-      backgroundPosition: '0 100%',
-      backgroundRepeat: 'no-repeat',
-      transition: 'background-size 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-      paddingBottom: '4px',
-    },
-    projectStats: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: isMobile ? '16px' : '24px',
-      flexWrap: 'wrap',
-    },
-    statItem: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '4px',
-    },
-    statLabel: {
-      fontSize: isMobile ? '9px' : '10px',
-      letterSpacing: '2px',
-      textTransform: 'uppercase',
-      color: 'rgba(255, 255, 255, 0.4)',
-    },
-    statValue: {
-      fontSize: isMobile ? '14px' : '16px',
-      fontFamily: "'Playfair Display', serif",
-      color: 'rgba(255, 255, 255, 0.9)',
-    },
-  });
-
-  const responsiveStyles = getResponsiveStyles();
+// ─── Main page ──────────────────────────────────────────────────────────────────
+const Projects: React.FC = () => {
+  const [lightboxId, setLightboxId] = useState<number | null>(null);
+  const activeProject = lightboxId != null ? projects.find(p => p.id === lightboxId) ?? null : null;
 
   return (
-    <div ref={containerRef} style={responsiveStyles.container}>
+    <div className="proj-page">
       <style>{`
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(60px); }
-          to { opacity: 1; transform: translateY(0); }
+        /* ── Page ── */
+        .proj-page {
+          min-height: 100vh;
+          color: #fff;
+          font-family: 'Outfit', sans-serif;
+          padding: 110px 40px 80px;
         }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+        .proj-inner { max-width: 1400px; margin: 0 auto; }
+
+        /* ── Header ── */
+        .proj-header { margin-bottom: 56px; }
+        .proj-eyebrow {
+          font-size: 11px;
+          letter-spacing: 4px;
+          text-transform: uppercase;
+          color: #d4af37;
+          margin-bottom: 16px;
         }
-        
-        @keyframes scaleIn {
-          from { transform: scale(0.95); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
+        .proj-heading {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(40px, 6vw, 72px);
+          font-weight: 500;
+          line-height: 1.05;
+          margin: 0 0 20px;
+          color: #fff;
         }
-        
-        @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
+        .proj-heading em {
+          font-style: italic;
+          color: #e87f2a;
         }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        @keyframes borderDraw {
-          from { clip-path: inset(0 100% 0 0); }
-          to { clip-path: inset(0 0 0 0); }
+        .proj-rule {
+          width: 60px; height: 2px;
+          background: rgba(255,255,255,0.25);
+          border: none; margin: 0;
         }
 
-        @keyframes photoReveal {
-          from { opacity: 0; transform: scale(0.9) translateY(20px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
+        /* ── Stats strip ── */
+        .proj-stats {
+          display: flex;
+          gap: 0;
+          margin-bottom: 64px;
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 12px;
+          overflow: hidden;
+        }
+        .proj-stat {
+          flex: 1;
+          padding: 24px 28px;
+          border-right: 1px solid rgba(255,255,255,0.1);
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .proj-stat:last-child { border-right: none; }
+        .proj-stat-num {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(32px, 4vw, 48px);
+          font-weight: 500;
+          color: #e87f2a;
+          line-height: 1;
+        }
+        .proj-stat-label {
+          font-size: 11px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.5);
         }
 
-        @keyframes cardSlideUp {
-          from { opacity: 0; transform: translateY(40px); }
-          to { opacity: 1; transform: translateY(0); }
+        /* ── Grid ── */
+        .proj-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 28px;
         }
 
-        @keyframes pulseGlow {
-          0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
-          50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.2); }
+        /* ── Card ── */
+        .pc-card {
+          cursor: pointer;
+          animation: pcFadeUp 0.5s ease both;
+          border-radius: 10px;
+          overflow: hidden;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.07);
+          transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
-        .project-item {
-          animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .pc-card:hover {
+          border-color: rgba(232,127,42,0.4);
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .pc-card:focus-visible {
+          outline: 2px solid #e87f2a;
+          outline-offset: 2px;
+        }
+        @keyframes pcFadeUp {
+          from { opacity: 0; transform: translateY(24px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Card image ── */
+        .pc-img-wrap {
+          position: relative;
+          aspect-ratio: 4/5;
+          overflow: hidden;
+        }
+        .pc-img {
+          transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+        }
+        .pc-card:hover .pc-img {
+          transform: scale(1.05);
+        }
+        .pc-overlay {
+          position: absolute; inset: 0;
+          background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.75) 100%);
+        }
+        .pc-badge {
+          position: absolute;
+          top: 12px; right: 12px;
+          background: rgba(0,0,0,0.55);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255,255,255,0.15);
+          border-radius: 20px;
+          padding: 5px 10px;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.5px;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          color: rgba(255,255,255,0.85);
+        }
+        .pc-cta {
+          position: absolute;
+          bottom: 16px; left: 16px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 12px;
+          font-weight: 500;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          color: #fff;
           opacity: 0;
+          transform: translateY(8px);
+          transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        
-        /* Desktop-only hover effects */
-        @media (hover: hover) and (pointer: fine) {
-          .project-item:hover .project-image {
-            transform: scale(1.08);
-          }
-          
-          .project-item:hover .project-overlay {
-            opacity: 1;
-          }
-          
-          .project-item:hover .project-number {
-            transform: translateX(-10px);
-            opacity: 0.3;
-          }
-          
-          .project-item:hover .view-project {
-            opacity: 1;
-            transform: translateY(0);
-          }
-          
-          .project-item:hover .project-meta-line {
-            width: 100%;
-          }
-          
-          .project-item:hover .project-title-text {
-            background-size: 100% 2px;
-          }
-
-          .project-item:hover .photo-grid {
-            opacity: 1;
-            transform: translateY(0);
-          }
-
-          .photo-thumb:hover {
-            transform: scale(1.08) !important;
-            z-index: 2;
-          }
-
-          .photo-thumb:hover .photo-overlay {
-            opacity: 1;
-          }
-          
-          .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-          }
-
-          .close-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-          }
-          
-          .photo-count-badge:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
-          }
+        .pc-card:hover .pc-cta {
+          opacity: 1;
+          transform: translateY(0);
         }
 
-        .photo-thumb {
-          animation: photoReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          opacity: 0;
+        /* ── Card info ── */
+        .pc-info { padding: 14px 16px 16px; }
+        .pc-category {
+          display: inline-block;
+          font-size: 10px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          color: #e87f2a;
+          margin-bottom: 6px;
         }
+        .pc-title {
+          font-family: 'Outfit', sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          color: rgba(255,255,255,0.9);
+          margin: 0 0 8px;
+          line-height: 1.4;
+        }
+        .pc-meta {
+          font-size: 11px;
+          color: rgba(255,255,255,0.4);
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .pc-dot { opacity: 0.4; }
 
-        /* Custom cursor - only on non-touch devices */
-        .custom-cursor {
-          pointer-events: none;
-          position: fixed;
-          width: 120px;
-          height: 120px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
+        /* ── Lightbox ── */
+        .lb-overlay {
+          position: fixed; inset: 0;
+          background: rgba(0,0,0,0.97);
+          z-index: 9999;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-family: 'Outfit', sans-serif;
-          font-size: 12px;
+          animation: lbFadeIn 0.25s ease;
+        }
+        @keyframes lbFadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        .lb-box {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          padding: 16px 20px 16px;
+          box-sizing: border-box;
+        }
+        .lb-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 12px;
+          flex-shrink: 0;
+        }
+        .lb-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(16px, 2.5vw, 22px);
+          color: rgba(255,255,255,0.9);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 70%;
+        }
+        .lb-header-right {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          flex-shrink: 0;
+        }
+        .lb-counter {
+          font-size: 13px;
           letter-spacing: 2px;
-          text-transform: uppercase;
+          color: rgba(255,255,255,0.45);
+        }
+        .lb-close {
+          width: 40px; height: 40px;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,0.15);
+          background: rgba(255,255,255,0.07);
           color: white;
-          z-index: 9999;
-          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-          transform: translate(-50%, -50%) scale(0);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background 0.2s;
+          flex-shrink: 0;
+        }
+        .lb-close:hover { background: rgba(255,255,255,0.18); }
+        .lb-img-wrap {
+          flex: 1;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          min-height: 0;
+        }
+        .lb-img {
+          max-width: 92%;
+          max-height: 100%;
+          object-fit: contain;
+          border-radius: 6px;
+          animation: lbImgIn 0.3s cubic-bezier(0.16,1,0.3,1);
+        }
+        @keyframes lbImgIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        .lb-nav {
+          position: absolute;
+          top: 50%; transform: translateY(-50%);
+          width: 52px; height: 52px;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,0.15);
+          background: rgba(255,255,255,0.08);
+          backdrop-filter: blur(10px);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background 0.2s;
+          z-index: 2;
+        }
+        .lb-nav:hover { background: rgba(255,255,255,0.2); }
+        .lb-nav-prev { left: 16px; }
+        .lb-nav-next { right: 16px; }
+        .lb-thumbs {
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+          padding: 14px 0 4px;
+          overflow-x: auto;
+          flex-shrink: 0;
+          scrollbar-width: none;
+        }
+        .lb-thumbs::-webkit-scrollbar { display: none; }
+        .lb-thumb {
+          width: 56px; height: 42px;
+          border-radius: 5px;
+          overflow: hidden;
+          border: 2px solid transparent;
+          cursor: pointer;
+          flex-shrink: 0;
+          padding: 0;
+          background: none;
+          opacity: 0.45;
+          transition: opacity 0.2s, border-color 0.2s;
+        }
+        .lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .lb-thumb-active { opacity: 1; border-color: #e87f2a; }
+        .lb-thumb:hover { opacity: 0.85; }
+        .lb-swipe-hint {
+          text-align: center;
+          font-size: 11px;
+          letter-spacing: 1px;
+          color: rgba(255,255,255,0.25);
+          margin: 6px 0 0;
+          flex-shrink: 0;
+          display: none;
         }
 
-        .custom-cursor.active {
-          transform: translate(-50%, -50%) scale(1);
+        /* ── Responsive ── */
+        @media (max-width: 1200px) {
+          .proj-page { padding: 100px 28px 60px; }
+          .proj-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
         }
-
-        .section-header {
-          animation: fadeIn 1s ease forwards;
+        @media (max-width: 900px) {
+          .proj-page { padding: 90px 20px 60px; }
+          .proj-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+          .proj-stats { margin-bottom: 40px; }
+          .proj-stat { padding: 18px 16px; }
+          .proj-header { margin-bottom: 36px; }
         }
-
-        .header-line {
-          animation: borderDraw 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          animation-delay: 0.3s;
+        @media (max-width: 600px) {
+          .proj-page { padding: 80px 12px 48px; }
+          .proj-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+          .proj-stats { margin-bottom: 28px; border-radius: 10px; }
+          .proj-stat { padding: 14px 12px; gap: 2px; }
+          .proj-stat-num { font-size: 26px; }
+          .proj-stat-label { font-size: 9px; letter-spacing: 1px; }
+          .proj-heading { font-size: clamp(32px, 9vw, 44px); }
+          .proj-header { margin-bottom: 24px; }
+          .pc-img-wrap { aspect-ratio: 1/1; }
+          .pc-info { padding: 10px 12px 12px; }
+          .pc-title { font-size: 12px; margin-bottom: 4px; }
+          .pc-category { font-size: 9px; margin-bottom: 4px; }
+          .pc-meta { font-size: 10px; }
+          .pc-cta { display: none; }
+          .lb-nav { width: 40px; height: 40px; }
+          .lb-nav-prev { left: 6px; }
+          .lb-nav-next { right: 6px; }
+          .lb-swipe-hint { display: block; }
+          .lb-nav { display: none; }
+          .lb-box { padding: 12px 14px 12px; }
+          .lb-thumb { width: 48px; height: 36px; }
         }
-
-        /* Touch device active states */
+        @media (max-width: 380px) {
+          .proj-grid { grid-template-columns: 1fr; gap: 14px; }
+          .pc-img-wrap { aspect-ratio: 16/9; }
+        }
         @media (hover: none) and (pointer: coarse) {
-          .project-item:active .project-image {
-            transform: scale(1.02);
-          }
-          
-          .photo-thumb:active {
-            transform: scale(0.95);
-          }
-          
-          .stats-card:active {
-            transform: scale(0.98);
-          }
+          .pc-card:hover { transform: none; }
+          .pc-cta { opacity: 1; transform: none; }
         }
-        
-        /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
-          * {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-          }
-        }
-        
-        /* Tablet-specific styles */
-        @media screen and (min-width: 768px) and (max-width: 1024px) {
-          .stats-card:nth-child(3) {
-            grid-column: span 2;
-            max-width: 50%;
-            margin: 0 auto;
-          }
+          .pc-card { animation: none; opacity: 1; }
+          .lb-overlay, .lb-img { animation: none; }
         }
       `}</style>
 
-      {/* Lightbox */}
-      {lightbox && currentProject && (
-        <Lightbox
-          photos={currentProject.photos}
-          currentIndex={lightbox.photoIndex}
-          onClose={closeLightbox}
-          onNext={nextPhoto}
-          onPrev={prevPhoto}
-          onSelectPhoto={selectPhoto}
-          projectTitle={currentProject.title}
-          isMobile={isMobile}
-        />
-      )}
+      <div className="proj-inner">
+        {/* Header */}
+        <header className="proj-header">
+          <p className="proj-eyebrow">Our Work</p>
+          <h1 className="proj-heading">
+            Successful <em>Projects</em>
+          </h1>
+          <hr className="proj-rule" />
+        </header>
 
-      {/* Custom Cursor - Only on desktop */}
-      {!isMobile && !isTablet && (
-        <div 
-          className={`custom-cursor ${isHovering ? 'active' : ''}`}
-          style={{ left: cursorPos.x, top: cursorPos.y }}
-        >
-          View
+        {/* Stats */}
+        <div className="proj-stats" role="list">
+          {stats.map(s => (
+            <div key={s.label} className="proj-stat" role="listitem">
+              <span className="proj-stat-num">{s.number}</span>
+              <span className="proj-stat-label">{s.label}</span>
+            </div>
+          ))}
         </div>
-      )}
 
-      {/* Background Elements */}
-      <div style={responsiveStyles.backgroundGradient} />
-      <div style={responsiveStyles.noiseOverlay} />
-      
-      {/* Header Section */}
-      <header style={responsiveStyles.header} className="section-header">
-        <h1 style={responsiveStyles.mainTitle}>
-          <span style={responsiveStyles.titleLine}>Our</span>
-          <span style={responsiveStyles.titleLineAccent}>Successful</span>
-          <span style={responsiveStyles.titleLine}>Projects</span>
-        </h1>
-        <div style={responsiveStyles.headerLine} className="header-line" />
-      </header>
-
-      {/* Stats Cards Section */}
-      <div style={responsiveStyles.statsSection}>
-        <div style={responsiveStyles.statsGrid}>
-          {statsCards.map((card, index) => (
-            <StatsCard 
-              key={card.id} 
-              card={card} 
-              index={index} 
-              isMobile={isMobile}
-              isTablet={isTablet}
+        {/* Grid */}
+        <div className="proj-grid">
+          {projects.map((p, i) => (
+            <ProjectCard
+              key={p.id}
+              project={p}
+              index={i}
+              onOpen={id => setLightboxId(id)}
             />
           ))}
         </div>
       </div>
 
-      {/* Projects Grid */}
-      <div style={responsiveStyles.projectsContainer}>
-        {projects.map((project, index) => (
-          <article
-            key={project.id}
-            className="project-item"
-            style={{
-              ...responsiveStyles.projectItem,
-              animationDelay: `${index * 0.15}s`
-            }}
-            onMouseEnter={() => {
-              if (!isMobile && !isTablet) setIsHovering(true);
-            }}
-            onMouseLeave={() => {
-              if (!isMobile && !isTablet) setIsHovering(false);
-            }}
-          >
-            {/* Project Number */}
-            <span style={responsiveStyles.projectNumber} className="project-number">
-              {(index + 1).toString().padStart(2, '0')}
-            </span>
-
-            {/* Cover Image Container */}
-            <div 
-              style={responsiveStyles.imageWrapper}
-              onClick={() => openLightbox(project.id, 0)}
-            >
-              <LazyBgImage
-                src={project.coverImage}
-                className="project-image"
-                style={responsiveStyles.projectImage}
-              />
-              <div style={responsiveStyles.imageGradient} className="project-overlay" />
-              
-              {/* Photo Count Badge */}
-              <div style={responsiveStyles.photoCountBadge} className="photo-count-badge">
-                <svg width={isMobile ? "14" : "16"} height={isMobile ? "14" : "16"} viewBox="0 0 24 24" fill="none" style={{ marginRight: '6px' }}>
-                  <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
-                  <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
-                  <path d="M21 15L16 10L5 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                {project.photos.length} Photos
-              </div>
-              
-              {/* View Project Button */}
-              <div style={responsiveStyles.viewProject} className="view-project">
-                <span style={responsiveStyles.viewProjectText}>View Gallery</span>
-                <svg width={isMobile ? "18" : "24"} height={isMobile ? "18" : "24"} viewBox="0 0 24 24" fill="none" style={responsiveStyles.arrowIcon}>
-                  <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </div>
-
-            {/* Photo Thumbnails Grid */}
-            <div style={responsiveStyles.photoGrid} className="photo-grid">
-              {project.photos.slice(0, 4).map((photo, photoIndex) => (
-                <div
-                  key={photoIndex}
-                  className="photo-thumb"
-                  style={{
-                    ...responsiveStyles.photoThumb,
-                    animationDelay: `${photoIndex * 0.1}s`,
-                  }}
-                  onClick={() => openLightbox(project.id, photoIndex)}
-                >
-                  <img src={photo} alt={`${project.title} photo ${photoIndex + 1}`} style={responsiveStyles.photoThumbImg} loading="lazy" decoding="async" />
-                  <div style={responsiveStyles.photoOverlay} className="photo-overlay">
-                    <svg width={isMobile ? "16" : "20"} height={isMobile ? "16" : "20"} viewBox="0 0 24 24" fill="none">
-                      <path d="M15 3H21V9M21 3L13 11M10 6H6C4.89543 6 4 6.89543 4 8V18C4 19.1046 4.89543 20 6 20H16C17.1046 20 18 19.1046 18 18V14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  {/* Show +X more indicator on last visible thumbnail */}
-                  {photoIndex === 3 && project.photos.length > 4 && (
-                    <div style={responsiveStyles.morePhotos}>
-                      +{project.photos.length - 4}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Project Info */}
-            <div style={responsiveStyles.projectInfo}>
-              <div style={responsiveStyles.projectMeta}>
-                <span style={responsiveStyles.projectCategory}>{project.category}</span>
-                <div style={responsiveStyles.projectMetaLine} className="project-meta-line" />
-                <span style={responsiveStyles.projectLocation}>{project.location}</span>
-              </div>
-              
-              <h2 style={responsiveStyles.projectTitle}>
-                <span style={responsiveStyles.projectTitleText} className="project-title-text">
-                  {project.title}
-                </span>
-              </h2>
-              
-              <div style={responsiveStyles.projectStats}>
-                <div style={responsiveStyles.statItem}>
-                  <span style={responsiveStyles.statLabel}>Year</span>
-                  <span style={responsiveStyles.statValue}>{project.year}</span>
-                </div>
-
-                <div style={responsiveStyles.statItem}>
-                  <span style={responsiveStyles.statLabel}>Photos</span>
-                  <span style={responsiveStyles.statValue}>{project.photos.length}</span>
-                </div>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
+      {/* Lightbox */}
+      {activeProject && (
+        <Lightbox
+          project={activeProject}
+          startIndex={0}
+          onClose={() => setLightboxId(null)}
+        />
+      )}
     </div>
   );
 };
 
-export default ProjectShowcase;
+export default Projects;

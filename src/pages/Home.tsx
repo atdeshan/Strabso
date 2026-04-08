@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
 import "../styles/Home.css";
 import RotatableCarousel from "../components/RotatableCarousel";
 import welcomeSVG from "../assets/welcome.png";
@@ -40,12 +39,8 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.8 }}
-      className="home-wrapper"
+    <div
+      className="home-wrapper home-fade-in"
       role="main"
       aria-label="Home page"
     >
@@ -62,24 +57,14 @@ const Home: React.FC = () => {
                 |
               </span>
             </h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2, duration: 0.8 }}
-              className="subtitle"
-            >
+            <p className="subtitle home-subtitle-in">
               Your gateway to stunning visuals and seamless navigation.
               <br />
               We create unforgettable experiential events.
-            </motion.p>
+            </p>
 
             {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2.5, duration: 0.6 }}
-              className="cta-buttons"
-            >
+            <div className="cta-buttons home-cta-in">
               <button
                 className="primary-btn"
                 onClick={scrollToServices}
@@ -94,17 +79,12 @@ const Home: React.FC = () => {
               >
                 Contact Us
               </button>
-            </motion.div>
+            </div>
           </header>
         </div>
 
         {/* Right Side - Image */}
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="home-image"
-        >
+        <div className="home-image home-image-in">
           <div className="image-container">
             <img
               src={welcomeSVG}
@@ -115,7 +95,7 @@ const Home: React.FC = () => {
             {/* Glowing effect behind image */}
             <div className="image-glow" aria-hidden="true"></div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       <div className="services-section">
@@ -125,8 +105,8 @@ const Home: React.FC = () => {
       <div className="carousel-section">
         <RotatableCarousel />
       </div>
-      
-    </motion.div>
+
+    </div>
   );
 };
 
