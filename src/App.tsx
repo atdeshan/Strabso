@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
 import ErrorBoundary from "./components/ErrorBoundary";
-import StarrySky from "./components/StarrySky";
 import MainContent from "./components/MainContent";
 
 function App() {
@@ -11,7 +10,6 @@ function App() {
     <ErrorBoundary>
       <BrowserRouter basename="/Strabso">
         <div className="App">
-          <StarrySky />
           <Routes>
             <Route path="/" element={<MainContent />} />
           </Routes>

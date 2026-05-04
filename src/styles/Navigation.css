@@ -1,4 +1,4 @@
-/* Glass Navbar Styles */
+/* Glass Navbar Styles — light theme */
 
 .glass-navbar {
   position: fixed;
@@ -13,29 +13,30 @@
 .navbar-wrapper {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  background-color: rgba(128, 128, 128, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(8, 8, 18, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 0.75rem 1.5rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
   transition: all 0.7s ease;
 }
 
 .navbar-wrapper:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(8, 8, 18, 0.97);
 }
 
 .navbar-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: white;
+  color: #ffffff;
   font-weight: 700;
   font-size: 1.25rem;
   text-decoration: none;
@@ -82,36 +83,63 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 0.95rem;
-  /* Minimum 44px touch target height */
   min-height: 44px;
   display: flex;
   align-items: center;
 }
 
 .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .nav-link.active {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: white;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .nav-link-pulse {
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   animation: navPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes navPulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.4; }
+}
+
+.nav-contact-btn {
+  padding: 0.55rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.3s ease;
+  min-height: 44px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.nav-contact-btn:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+}
+
+.nav-contact-btn.active {
+  background-color: rgba(232, 127, 42, 0.15);
+  border-color: rgba(232, 127, 42, 0.6);
+  color: #e87f2a;
 }
 
 /* ── Tablet (768–1024px) ─────────────────────────────── */
@@ -122,6 +150,11 @@
 
   .nav-link {
     padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .nav-contact-btn {
+    padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
 }
@@ -150,6 +183,11 @@
     padding: 0.5rem 0.8rem;
     font-size: 0.85rem;
   }
+
+  .nav-contact-btn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.85rem;
+  }
 }
 
 /* ── Small mobile (≤480px) ───────────────────────────── */
@@ -162,6 +200,12 @@
   .nav-link {
     padding: 0.45rem 0.65rem;
     font-size: 0.8rem;
+  }
+
+  .nav-contact-btn {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.8rem;
+    margin-left: 0.25rem;
   }
 }
 

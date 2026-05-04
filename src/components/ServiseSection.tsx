@@ -417,9 +417,9 @@ const ServicesSection: React.FC = () => {
         .services-section {
           --bg-primary: transparent;
           --bg-secondary: transparent;
-          --text-primary: #f8fafc;
-          --text-secondary: #fbfbfb;
-          --border-color: rgba(148, 163, 184, 0.15);
+          --text-primary: #0f172a;
+          --text-secondary: #475569;
+          --border-color: rgba(0, 0, 0, 0.08);
           
           font-family: 'Outfit', sans-serif;
           background: transparent;
@@ -462,12 +462,12 @@ const ServicesSection: React.FC = () => {
           align-items: center;
           gap: 0.75rem;
           padding: 0.5rem 1.25rem;
-          background: rgba(59, 130, 246, 0.1);
-          border: 1px solid rgba(59, 130, 246, 0.2);
+          background: rgba(232, 127, 42, 0.1);
+          border: 1px solid rgba(232, 127, 42, 0.25);
           border-radius: 100px;
           font-size: 0.875rem;
           font-weight: 500;
-          color: #f20000;
+          color: #c0522a;
           text-transform: uppercase;
           letter-spacing: 0.1em;
           margin-bottom: 1.5rem;
@@ -480,7 +480,7 @@ const ServicesSection: React.FC = () => {
           content: '';
           width: 8px;
           height: 8px;
-          background: #ff0505;
+          background: #e87f2a;
           border-radius: 50%;
           animation: pulse 2s ease-in-out infinite;
         }
@@ -503,7 +503,7 @@ const ServicesSection: React.FC = () => {
         }
 
         .section-title span {
-          background: linear-gradient(135deg, #f53d00, #60fa4b, #f3ff06);
+          background: linear-gradient(135deg, #c0522a, #e87f2a, #d4860a);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -511,7 +511,7 @@ const ServicesSection: React.FC = () => {
 
         .section-subtitle {
           font-size: 1.125rem;
-          color: white !important;
+          color: var(--text-secondary) !important;
           max-width: 600px;
           margin: 0 auto;
           line-height: 1.7;
@@ -544,11 +544,7 @@ const ServicesSection: React.FC = () => {
         .card-inner {
           position: relative;
           padding: 2.5rem;
-          background: linear-gradient(
-            135deg,
-            rgba(15, 23, 42, 0.8),
-            rgba(15, 23, 42, 0.4)
-          );
+          background: #ffffff;
           border: 1px solid var(--border-color);
           border-radius: 24px;
           overflow: hidden;
@@ -570,10 +566,9 @@ const ServicesSection: React.FC = () => {
         .card-inner:hover {
           transform: translateY(-8px);
           border-color: var(--accent);
-          box-shadow: 
-            0 25px 50px -12px rgba(0, 0, 0, 0.5),
-            0 0 0 1px var(--accent),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+          box-shadow:
+            0 16px 40px -8px rgba(0, 0, 0, 0.12),
+            0 0 0 1px var(--accent);
         }
 
         .card-bg {
@@ -582,7 +577,7 @@ const ServicesSection: React.FC = () => {
           background: linear-gradient(
             135deg,
             transparent 0%,
-            rgba(59, 130, 246, 0.05) 50%,
+            rgba(0, 0, 0, 0.03) 50%,
             transparent 100%
           );
           opacity: 0;

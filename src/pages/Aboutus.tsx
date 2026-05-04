@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ContactUs from '../components/Contacts';
 
 const AboutUs: React.FC = () => {
   const statsRef = useRef<HTMLDivElement>(null);
@@ -87,17 +86,17 @@ const AboutUs: React.FC = () => {
       <style>{`
 
         .about-us-page {
-          --color-bg: transparent;
-          --color-bg-secondary: rgba(18, 18, 26, 0.85);
-          --color-text: #ffffff;
-          --color-text-muted: #a0a0b0;
-          --color-accent: #00ff84;
-          --color-accent-hover: #fb923c;
-          --color-border: rgba(255, 255, 255, 0.1);
+          --color-bg: #ffffff;
+          --color-bg-secondary: rgba(0, 0, 0, 0.03);
+          --color-text: #111111;
+          --color-text-muted: #666666;
+          --color-accent: #e87f2a;
+          --color-accent-hover: #c0522a;
+          --color-border: rgba(0, 0, 0, 0.1);
           --font-display: 'Playfair Display', Georgia, serif;
           --font-body: 'Outfit', sans-serif;
 
-          background-color: transparent;
+          background-color: var(--color-bg);
           color: var(--color-text);
           font-family: var(--font-body);
           min-height: 100vh;
@@ -133,7 +132,7 @@ const AboutUs: React.FC = () => {
           content: '';
           position: absolute;
           inset: 0;
-          background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+          background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
           background-size: 50px 50px;
           pointer-events: none;
         }
@@ -255,9 +254,9 @@ const AboutUs: React.FC = () => {
 
         .vm-card {
           padding: 2.5rem;
-          border: 1px solid rgba(255,255,255,0.08);
+          border: 1px solid rgba(0,0,0,0.07);
           border-radius: 16px;
-          background: rgba(255,255,255,0.03);
+          background: rgba(0,0,0,0.02);
           backdrop-filter: blur(10px);
           display: flex;
           flex-direction: column;
@@ -266,7 +265,7 @@ const AboutUs: React.FC = () => {
         }
 
         .vm-card:hover {
-          border-color: rgba(255,255,255,0.18);
+          border-color: rgba(0,0,0,0.14);
           transform: translateY(-4px);
         }
 
@@ -277,7 +276,7 @@ const AboutUs: React.FC = () => {
           align-items: center;
           justify-content: center;
           border-radius: 12px;
-          background: rgba(255,255,255,0.06);
+          background: rgba(0,0,0,0.05);
           color: var(--color-accent);
           flex-shrink: 0;
         }
@@ -495,7 +494,7 @@ const AboutUs: React.FC = () => {
         /* Stats Banner */
         .stats-banner {
           padding: 5rem 1.5rem;
-          background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(10, 10, 15, 0.6) 100%);
+          background: linear-gradient(135deg, rgba(232, 127, 42, 0.07) 0%, rgba(245, 244, 240, 0.8) 100%);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
           border-top: 1px solid var(--color-border);
@@ -532,13 +531,15 @@ const AboutUs: React.FC = () => {
           text-align: center;
           position: relative;
           overflow: hidden;
+          background: linear-gradient(160deg, #fff8f2 0%, #fdebd4 45%, #fad9b0 100%);
         }
 
         .cta-section::before {
           content: '';
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at center, rgba(249, 115, 22, 0.15), transparent 70%);
+          background: radial-gradient(ellipse at 60% 40%, rgba(232, 127, 42, 0.18), transparent 65%);
+          pointer-events: none;
         }
 
         .cta-content {
@@ -1127,7 +1128,7 @@ const AboutUs: React.FC = () => {
           {/* Founder Quote */}
           <div className="founder-quote fade-up">
             <blockquote>
-              "We look forward to the opportunity to prove how we can elevate your brand to new heights."
+              "At Strabo pvt ltd, we are driven to partnering with you to shape powerful brands and elevate them to new heights through bold events and impactful brand activations."
             </blockquote>
             <cite>— Rumesh Chandrakumar, Founder</cite>
           </div>
@@ -1218,11 +1219,9 @@ const AboutUs: React.FC = () => {
         </div>
       </section>
 
-      <div>
-        <ContactUs />
-      </div>
     </div>
   );
 };
 
 export default AboutUs;
+

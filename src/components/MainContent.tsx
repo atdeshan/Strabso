@@ -4,6 +4,10 @@ import Navigation from "../components/Navigation";
 import Home from "../pages/Home";
 import ProjectShowcase from "../pages/Projects";
 import AboutUs from "../pages/Aboutus";
+import ContactUs from "../components/Contacts";
+import CoverageMap from "../components/CoverageMap";
+import Footer from "../components/Footer";
+import Blorp from "../components/Blorp";
 
 // Constants moved outside component to avoid recreation on each render
 const NAVBAR_HEIGHT = 80; // Your navbar height in pixels
@@ -16,12 +20,14 @@ const MainContent: React.FC = () => {
   const homeRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
 
   // Map section names to refs - memoized to maintain stable reference
   const sectionRefs = useMemo(() => ({
     Home: homeRef,
     Projects: projectsRef,
     About: aboutRef,
+    Contact: contactRef,
   }), []);
 
   // Scroll to section with custom offset
@@ -72,6 +78,7 @@ const MainContent: React.FC = () => {
 
   return (
     <>
+      <Blorp />
       <Navigation activeTab={activeTab} onTabClick={scrollToSection} />
 
       <main className="sections-container">
@@ -87,10 +94,13 @@ const MainContent: React.FC = () => {
           <AboutUs />
         </section>
 
-        {/* <section ref={contactRef} data-section="Contact" className="full-section">
+        <section ref={contactRef} data-section="Contact" className="full-section">
           <ContactUs />
-        </section>  */}
+        </section>
       </main>
+
+      <CoverageMap />
+      <Footer />
     </>
   );
 };

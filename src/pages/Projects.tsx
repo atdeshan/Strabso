@@ -184,6 +184,7 @@ const stats = [
   { number: "9",    label: "Provinces" },
 ];
 
+
 // ─── Lazy background image ──────────────────────────────────────────────────────
 const LazyBg: React.FC<{ src: string; className?: string }> = ({ src, className }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -365,6 +366,7 @@ const Projects: React.FC = () => {
         /* ── Page ── */
         .proj-page {
           min-height: 100vh;
+          background: #07070f;
           color: #fff;
           font-family: 'Outfit', sans-serif;
           padding: 110px 40px 80px;
@@ -731,7 +733,7 @@ const Projects: React.FC = () => {
         <header className="proj-header">
           <p className="proj-eyebrow">Our Work</p>
           <h1 className="proj-heading">
-            Successful <em>Projects</em>
+            Projects
           </h1>
           <hr className="proj-rule" />
         </header>

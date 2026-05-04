@@ -66,9 +66,9 @@ const NavButton: React.FC<{
         width: 48,
         height: 48,
         borderRadius: '50%',
-        border: `1px solid ${hovered && color ? `${color}55` : 'rgba(255,255,255,0.14)'}`,
-        background: hovered && color ? `${color}20` : 'rgba(255,255,255,0.05)',
-        color: '#fff',
+        border: `1px solid ${hovered && color ? `${color}55` : 'rgba(0,0,0,0.12)'}`,
+        background: hovered && color ? `${color}15` : 'rgba(0,0,0,0.04)',
+        color: '#111',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
@@ -327,12 +327,12 @@ const RotatingCarousel: React.FC = () => {
                   overflow: 'hidden',
                   cursor: 'pointer',
                   transition: 'opacity 0.5s ease, filter 0.5s ease, box-shadow 0.5s ease',
-                  opacity: isActive ? 1 : 0.4,
-                  filter: isActive ? 'none' : 'brightness(0.4) saturate(0.5)',
+                  opacity: isActive ? 1 : 0.45,
+                  filter: isActive ? 'none' : 'brightness(0.85) saturate(0.55)',
                   boxShadow: isActive
-                    ? `0 0 50px ${brand.color}45, 0 24px 60px rgba(0,0,0,0.65), inset 0 0 0 1.5px ${brand.color}35`
-                    : '0 8px 24px rgba(0,0,0,0.5)',
-                  background: `radial-gradient(ellipse at 50% 35%, ${brand.color}18 0%, rgba(10,10,18,0.97) 65%)`,
+                    ? `0 0 30px ${brand.color}28, 0 8px 32px rgba(0,0,0,0.1), inset 0 0 0 1.5px ${brand.color}35`
+                    : '0 4px 16px rgba(0,0,0,0.07)',
+                  background: `radial-gradient(ellipse at 50% 35%, ${brand.color}14 0%, #f8f7f4 68%)`,
                 }}
                 onClick={() => handleCardClick(i)}
               >
@@ -354,7 +354,7 @@ const RotatingCarousel: React.FC = () => {
                       maxWidth: '100%',
                       maxHeight: '100%',
                       objectFit: 'contain',
-                      filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.55))',
+                      filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.12))',
                     }}
                   />
                 </div>
@@ -394,7 +394,7 @@ const RotatingCarousel: React.FC = () => {
           gap: 10,
           fontSize: 11,
           letterSpacing: '3px',
-          color: 'rgba(255,255,255,0.3)',
+          color: 'rgba(0,0,0,0.3)',
         }}>
           <span style={{ color: active?.color, fontWeight: 700, fontSize: 13 }}>
             {String(activeIndex + 1).padStart(2, '0')}
@@ -403,7 +403,7 @@ const RotatingCarousel: React.FC = () => {
             display: 'inline-block',
             width: 28,
             height: 1,
-            background: 'rgba(255,255,255,0.15)',
+            background: 'rgba(0,0,0,0.1)',
           }} />
           <span>{String(COUNT).padStart(2, '0')}</span>
         </div>
@@ -426,7 +426,7 @@ const RotatingCarousel: React.FC = () => {
           fontSize: isMobile ? 38 : 52,
           fontFamily: "'Playfair Display', Georgia, serif",
           fontWeight: 400,
-          color: '#ffffff',
+          color: '#0a0a12',
           lineHeight: 1.1,
           letterSpacing: '-0.5px',
           transition: 'all 0.4s ease',
@@ -439,14 +439,14 @@ const RotatingCarousel: React.FC = () => {
           width: 36,
           height: 2,
           borderRadius: 2,
-          background: active?.color ?? '#ffffff',
+          background: active?.color ?? '#111111',
           transition: 'background 0.5s ease',
         }} />
 
         {/* Description */}
         <p style={{
           fontSize: isMobile ? 13 : 14,
-          color: 'rgba(255,255,255,0.45)',
+          color: 'rgba(0,0,0,0.55)',
           lineHeight: 1.85,
           margin: 0,
           transition: 'all 0.4s ease',
@@ -487,8 +487,8 @@ const RotatingCarousel: React.FC = () => {
                   cursor: 'pointer',
                   transition: 'width 0.35s cubic-bezier(0.4,0,0.2,1), background 0.4s ease',
                   background: i === activeIndex
-                    ? (active?.color ?? '#ffffff')
-                    : 'rgba(255,255,255,0.18)',
+                    ? (active?.color ?? '#111111')
+                    : 'rgba(0,0,0,0.12)',
                 }}
               />
             ))}
