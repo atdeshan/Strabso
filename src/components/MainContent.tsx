@@ -7,7 +7,6 @@ import AboutUs from "../pages/Aboutus";
 import ContactUs from "../components/Contacts";
 import CoverageMap from "../components/CoverageMap";
 import Footer from "../components/Footer";
-import Blorp from "../components/Blorp";
 
 // Constants moved outside component to avoid recreation on each render
 const NAVBAR_HEIGHT = 80; // Your navbar height in pixels
@@ -78,7 +77,6 @@ const MainContent: React.FC = () => {
 
   return (
     <>
-      <Blorp />
       <Navigation activeTab={activeTab} onTabClick={scrollToSection} />
 
       <main className="sections-container">
