@@ -7,6 +7,21 @@ the rewrite, expires and header directives used here, so the config applies as
 written. Autoindex is enabled on the account, which is why `Options -Indexes`
 matters — see below.
 
+## This account hosts two sites
+
+`candidevents.lk` lives on the same cPanel account, in its own folder at the
+account root — a sibling of `public_html`, not inside it. `public_html` is
+**strabso.lk's** document root (confirmed: strabso.lk's directory listing shows
+exactly the contents of `public_html`).
+
+So extracting into `public_html` cannot affect Candid Events. Two rules:
+
+- Extract **inside `public_html`**, never at the account root, where the
+  `candidevents.lk` folder lives.
+- Do not delete `cgi-bin` or `.well-known` from `public_html`. `.well-known`
+  is what AutoSSL uses to validate the domain. Extracting adds files alongside
+  them; nothing needs removing first.
+
 ## Cutover order
 
 The old GitHub Pages site at `atdeshan.github.io/Strabso` stays up until the new
@@ -64,6 +79,9 @@ forces HTTPS. DNS and the certificate can take a few hours to settle.
   every project folder under it.
 - `ErrorDocument 404 /index.html`, so a genuinely missing file returns the app
   rather than the host's default error page.
+- A `.well-known` passthrough as the **first** rewrite rule. AutoSSL validates
+  over plain HTTP, before any certificate exists, so redirecting those requests
+  to HTTPS can stall issuance. Keep that rule above the redirects.
 - Baseline security headers; blocks dotfiles and `.map` files.
 
 To prefer `www` instead, swap the canonical-host rule in `.htaccess` and update
@@ -76,6 +94,7 @@ the four absolute URLs in `index.html`, plus `robots.txt` and `sitemap.xml`.
 - A deep link such as `https://strabso.lk/anything` returns the site, not a 404.
 - Project galleries show their photos (these are served from `/gallery/...`).
 - `https://strabso.lk/gallery/` does **not** return a directory listing.
+- `https://candidevents.lk` still loads, unchanged.
 - `https://strabso.lk/robots.txt` and `/sitemap.xml` resolve.
 
 ## Redeploying

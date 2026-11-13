@@ -15,6 +15,12 @@ ErrorDocument 404 /index.html
   RewriteEngine On
   RewriteBase /
 
+  # Let certificate validation through untouched, before any redirect below.
+  # AutoSSL fetches http://strabso.lk/.well-known/... and there is no valid
+  # certificate yet at that point, so redirecting it to HTTPS can stall
+  # issuance. Must stay first.
+  RewriteRule ^\.well-known/ - [L]
+
   # Force HTTPS. Namecheap terminates SSL upstream, so check the proxy header
   # as well as Apache's own HTTPS var, or this can loop.
   RewriteCond %{HTTPS} !=on
