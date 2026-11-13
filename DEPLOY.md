@@ -2,6 +2,22 @@
 
 Target: **https://strabso.lk** (non-www canonical), Namecheap cPanel shared hosting.
 
+The host runs **LiteSpeed**, not stock Apache. It reads `.htaccess` and supports
+the rewrite, expires and header directives used here, so the config applies as
+written. Autoindex is enabled on the account, which is why `Options -Indexes`
+matters — see below.
+
+## Cutover order
+
+The old GitHub Pages site at `atdeshan.github.io/Strabso` stays up until the new
+one is confirmed working. Do not turn it off first, or there is no live site at
+all while the upload is in progress.
+
+1. Upload and extract into `public_html` (below).
+2. Run AutoSSL and wait for the certificate.
+3. Work through **Verify after deploying**.
+4. Only once that passes, **Retire GitHub Pages** (last section).
+
 ## Build
 
 ```
@@ -42,6 +58,12 @@ forces HTTPS. DNS and the certificate can take a few hours to settle.
   handles deep links instead of Apache returning 404.
 - gzip/brotli compression, and caching: one year immutable for fingerprinted
   assets, no-cache for HTML so a new deploy is picked up immediately.
+- `Options -Indexes`, so directories are not browsable. This is not optional
+  here: the SPA fallback deliberately skips real directories (`RewriteCond !-d`),
+  so without it the host's autoindex would serve a listing of `/gallery/` and
+  every project folder under it.
+- `ErrorDocument 404 /index.html`, so a genuinely missing file returns the app
+  rather than the host's default error page.
 - Baseline security headers; blocks dotfiles and `.map` files.
 
 To prefer `www` instead, swap the canonical-host rule in `.htaccess` and update
@@ -53,6 +75,7 @@ the four absolute URLs in `index.html`, plus `robots.txt` and `sitemap.xml`.
 - `http://strabso.lk` and `https://www.strabso.lk` both 301 to the canonical URL.
 - A deep link such as `https://strabso.lk/anything` returns the site, not a 404.
 - Project galleries show their photos (these are served from `/gallery/...`).
+- `https://strabso.lk/gallery/` does **not** return a directory listing.
 - `https://strabso.lk/robots.txt` and `/sitemap.xml` resolve.
 
 ## Redeploying
@@ -71,3 +94,23 @@ clearing out old `assets/` occasionally keeps `public_html` tidy.
 - The GitHub Pages setup (`base: '/Strabso/'`, the router `basename`, the
   `404.html` redirect shim and the `gh-pages` deploy scripts) has been removed.
   `npm run deploy` no longer exists; the site is built for a domain root.
+
+## Retire GitHub Pages
+
+Only after the checks above pass. Until then the old site is the live one.
+
+Turning Pages off keeps the `gh-pages` branch, so it can be switched back on:
+
+```
+curl -X DELETE https://api.github.com/repos/atdeshan/Strabso/pages \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "Accept: application/vnd.github+json"
+```
+
+Or in the repo: **Settings → Pages → Unpublish site**.
+
+Leave the `gh-pages` branch in place. Deleting it is the one step that is not
+easily reversible, and it buys nothing once Pages is unpublished.
+
+Two live copies of the same site compete in search results, so do not leave
+Pages running alongside strabso.lk for longer than the cutover needs.
