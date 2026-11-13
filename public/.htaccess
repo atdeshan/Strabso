@@ -3,8 +3,13 @@
 # Upload the contents of dist/ (including this file) into public_html/
 # ---------------------------------------------------------------------
 
-Options -MultiViews
+# -Indexes matters here: the SPA rule below skips real directories (!-d), so
+# without it the host's autoindex lists /gallery/ and every project folder.
+Options -MultiViews -Indexes
 DirectoryIndex index.html
+
+# Keep the SPA fallback's response code honest for genuinely missing files.
+ErrorDocument 404 /index.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
