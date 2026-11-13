@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://atdeshan.github.io/Strabso/sitemap.xml
+Sitemap: https://strabso.lk/sitemap.xml
